@@ -1,5 +1,8 @@
 #include<bits/stdc++.h>
-
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <algorithm>
 using namespace std;
 
 #pragma GCC optimize("Ofast,unroll-loops") 
@@ -20,12 +23,14 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define vll vector<long long>
 #define vi vector<int>
 #define vl vector<long>
+#define usll unordered_set<ll>
 #define ar array
 #define ull unsigned long long
-#define vii vector<pair<int, int>>
-#define vpll vector<pair<long long long long>>
+#define vpll vector<pair<long long, long long>>
 #define vi vector<int>
 #define vl vector<long>
+#define umll unordered_map<ll, pair<ll, ll>>
+#define uml unordered_map<ll, ll>
 #define ar array
 #define mp make_pair
 #define ll long long
@@ -151,7 +156,13 @@ template <typename T> inline T PointDistanceMinimum(T x1,T y1,T x2, T y2)
 T tmp4=min(tmp1, tmp2); return tmp3+tmp4; } 
 template <typename T> inline T PointDistance3D(T x1,T y1,T z1,T x2,T y2,T z2)
 {return sqrt(square(x2-x1)+square(y2-y1)+square(z2-z1));} 
- 
+#define UPDATE_PREFIX_SUM(idx) \
+    if (uniqueElements.find(elements[(idx) - 1]) == uniqueElements.end()) { \
+        prefixSum[(idx)] = prefixSum[(idx) - 1] + 1; \
+        uniqueElements.insert(elements[(idx) - 1]); \
+    } else { \
+        prefixSum[(idx)] = prefixSum[(idx) - 1]; \
+    } 
 template <typename T> inline T Cube(T a){return a*a*a;} 
 template <typename T> inline T RectengularPrism(T a,T b,T c)
 {return a*b*c;} 
@@ -184,8 +195,69 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void solve() {
+    ll numElements;
+    cin >> numElements;
+    if (numElements == 0) {
+        cout << "0\n";
+        return;
+    }
 
+    vll elements(numElements);
+    ll idx = 0;
+    while (idx < numElements) {
+        cin >> elements[idx];
+        idx++;
+    }
 
+    umll elementToIndices;
+    uml elementFrequency;
+    idx = 0;
+    while (idx < numElements) {
+        elementFrequency[elements[idx]]++;
+        (elementToIndices.find(elements[idx]) == elementToIndices.end()) 
+            ? elementToIndices[elements[idx]].first = idx + 1 
+            : elementToIndices[elements[idx]].second = idx + 1;
+        idx++;
+    }
+
+    vll prefixSum(numElements + 1, 0);
+    usll uniqueElements;
+    idx = 1;
+    while (idx <= numElements) {
+        UPDATE_PREFIX_SUM(idx);
+        idx++;
+    }
+
+    vpll intervalList;
+    for (auto &element : elementToIndices) {
+        (element.second.second - element.second.first >= 1) 
+            ? intervalList.emplace_back(element.second.first, element.second.second) 
+            : void();
+    }
+
+    sort(intervalList.begin(), intervalList.end());
+
+    vpll mergedIntervals;
+    if (!intervalList.empty()) {
+        ll start = intervalList[0].first, end = intervalList[0].second;
+        idx = 1;
+        while (idx < intervalList.size()) {
+            (intervalList[idx].first <= end) 
+                ? end = max(end, intervalList[idx].second) 
+                : (mergedIntervals.emplace_back(start, end), start = intervalList[idx].first, end = intervalList[idx].second);
+            idx++;
+        }
+        mergedIntervals.emplace_back(start, end);
+    }
+
+    ll result = 0;
+    idx = 0;
+    while (idx < mergedIntervals.size()) {
+        result += (prefixSum[mergedIntervals[idx].second] - prefixSum[mergedIntervals[idx].first - 1]);
+        idx++;
+    }
+
+    cout << result << "\n";
 }
 
 

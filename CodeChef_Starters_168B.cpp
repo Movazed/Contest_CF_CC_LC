@@ -16,14 +16,13 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #endif
 #define lli long long int
 #define ull unsigned long long
-#define vii vector<pair<int, int>>
+#define vii vector<pair<int,int>>
 #define vll vector<long long>
 #define vi vector<int>
 #define vl vector<long>
 #define ar array
 #define ull unsigned long long
-#define vii vector<pair<int, int>>
-#define vpll vector<pair<long long long long>>
+#define vpll vector<pair<long long,long long>>
 #define vi vector<int>
 #define vl vector<long>
 #define ar array
@@ -151,7 +150,7 @@ template <typename T> inline T PointDistanceMinimum(T x1,T y1,T x2, T y2)
 T tmp4=min(tmp1, tmp2); return tmp3+tmp4; } 
 template <typename T> inline T PointDistance3D(T x1,T y1,T z1,T x2,T y2,T z2)
 {return sqrt(square(x2-x1)+square(y2-y1)+square(z2-z1));} 
- 
+#define CHECK_INV(inv, x, k) ((inv <= x && inv % k == 0) ? 1 : 2)
 template <typename T> inline T Cube(T a){return a*a*a;} 
 template <typename T> inline T RectengularPrism(T a,T b,T c)
 {return a*b*c;} 
@@ -184,8 +183,24 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void solve() {
+    ll n, x, k;
+    cin >> n >> x >> k;
+    ll zeros = 0;
+    string str;
+    cin >> str;
 
+    ll inv = 0;
+    ll i = n - 1;  
 
+    while (i >= 0) {
+        if (str[i] == '0') {
+            zeros++;} 
+            else {inv += zeros;
+        }
+        i--;  
+    }
+
+    cout << CHECK_INV(inv, x, k) << nl;
 }
 
 
