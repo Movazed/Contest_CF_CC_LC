@@ -29,9 +29,10 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define ar array
 #define mp make_pair
 #define ll long long
+
 #define ld long double
 #define sza(x) ((int)x.size())
-#define all(a) (a).begin(), (a).end()
+#define all(a)(a).begin(), (a).end()
 #define PRINT std::cout
 #define INPUT std::cin
 #define nl endl
@@ -151,7 +152,11 @@ template <typename T> inline T PointDistanceMinimum(T x1,T y1,T x2, T y2)
 T tmp4=min(tmp1, tmp2); return tmp3+tmp4; } 
 template <typename T> inline T PointDistance3D(T x1,T y1,T z1,T x2,T y2,T z2)
 {return sqrt(square(x2-x1)+square(y2-y1)+square(z2-z1));} 
- 
+#define BASE_CASE_AND_RECURSIVE_CALL(a, b) \
+    if (b == 0) \
+        return 1; \
+    ll t = power(a, b / 2); 
+
 template <typename T> inline T Cube(T a){return a*a*a;} 
 template <typename T> inline T RectengularPrism(T a,T b,T c)
 {return a*b*c;} 
@@ -176,16 +181,53 @@ template <typename T> inline T Cone (T radius,T base, T height)
 
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
+ll POWER(ll a, ll b) {
+    BASE_CASE_AND_RECURSIVE_CALL(a, b);
+    return (b % 2 == 0) ? (t * t) % MOD : (t * t * a) % MOD;
+}
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
+#define CHECK_AND_INCREMENT(a, b, rm, i) \
+    a[i] -= rm; \
+    if (a[i] < 0 ||a[i] <b[i]) { \
+        cout << "NO" << endl; \
+        return; \
+    } else { \
+        i++; \
+    }
 void solve() {
+    ll n;
+    cin >> n;
+    vll a(n), b(n);
 
+    int i = 0;
+    while (i < n) {
+        cin >> a[i];
+        i++;
+    }
 
+    i = 0;
+    while (i < n) {
+        cin >> b[i];
+        i++;
+    }
+
+    ll rm = 0;
+    i = 0;
+    while (i < n) {
+        a[i] < b[i] ? (rm += (b[i] - a[i]), a[i] += 2 * (b[i] - a[i])) : rm += 0;
+        i++;
+    }
+
+    i = 0;
+    while (i < n) {
+        CHECK_AND_INCREMENT(a, b, rm, i);
+    }
+
+    cout << "YES" << endl;
 }
 
 

@@ -15,16 +15,21 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define dbg(...)
 #endif
 #define lli long long int
+#define qi queue<int>
 #define ull unsigned long long
 #define vii vector<pair<int, int>>
 #define vll vector<long long>
 #define vi vector<int>
 #define vl vector<long>
+#define vvpii vector<vector<pair<int,int>>>
 #define ar array
+#define vvll vector<vector <long long>> 
 #define ull unsigned long long
 #define vii vector<pair<int, int>>
 #define vpll vector<pair<long long, long long>>
 #define vi vector<int>
+#define vvb vector<vector<bool>>
+#define vb vector<bool>
 #define vl vector<long>
 #define ar array
 #define mp make_pair
@@ -52,7 +57,7 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
-
+#define PRINT_GRID_ELEMENT(i, j, m) cout << grid[i][j]<< (j + 1 == m? "\n" : " ")
 
 // ----------------------</BITWISE>-------------------------- 
 /* a=target variable, b=bit number to act upon 0-n */
@@ -173,21 +178,173 @@ template <typename T> inline T Cone (T radius,T base, T height)
 #define len(x) int((x).size())
 #define pb push_back
 #define rall(n) n.rbegin(),n.rend()
-
+#define UPDATE_PATH(ch, r, c, path, idx) \
+    if (ch == 'D') r++;                  \
+    else c++;                            \
+    path.pb({r, c});                     \
+    idx++;
+#define UPDATE_FIXED_ROW_COL(i, j) \
+    if (!onPath[i][j]) {           \
+        fixedRow[i] +=grid[i][j]; \
+        fixedCol[j] +=grid[i][j]; \
+    }
+#define PUSH_IF_DEGREE_ONE(i) \
+    if (deg[i] == 1) {        \
+        qu.push(i);           \
+        inQueue[i] = true;    \
+    }                         \
+    i++;
+#define PROCESS_QUEUE(u)                                      \
+    if (removed[u] ||deg[u] == 0) continue;                  \
+    int nei = -1, eid = -1;                                   \
+    int k = 0;                                                \
+    while (k < adj[u].size()) {                               \
+        auto &p = adj[u][k];                                  \
+        if ( !usedEdge[p.second] ) {                            \
+            nei = p.first;                                    \
+            eid = p.second;                                   \
+            break;                                            \
+        }                                                     \
+        k++;                                                  \
+    }                                                         \
+    if (eid == -1) continue;                                  \
+    edgeVal[eid] = B[u];                                      \
+    usedEdge[eid] = true;                                     \
+    removed[u] = true;                                        \
+    deg[u]--;                                                 \
+    deg[nei]--;                                               \
+    B[nei] -= edgeVal[eid];                                   \
+    if (deg[nei] ==1 &&!removed[nei] &&!inQueue[nei]) {    \
+        qu.push(nei);                                         \
+        inQueue[nei] =true;                                  \
+    }
+#define UPDATE_GRID(i) \
+    auto pr = path[i]; \
+    grid[pr.first] [pr.second]=edgeVal[i]; \
+    i++;
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
+#define UPDATE_PATH(ch, r, c, path, idx) \
+    if (ch == 'D') r++;                  \
+    else c++;                            \
+    path.pb({r, c});                     \
+    idx++;
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
-
+#define ADD_EDGE(u, v, i) \
+    adj[u].pb({v, i});    \
+    adj[v].pb({u, i});
 
 void solve() {
+    ll n, m;
+    cin >> n >> m;
+    string s;
+    cin >> s;
 
+    ll L = n + m - 1;
+    vii path;
+    int r = 0, c = 0;
+    path.pb({r, c});
 
+    int idx = 0;
+    while (idx < s.size()) {
+        char ch = s[idx];
+        UPDATE_PATH(ch, r, c, path, idx); // Using the macro here
+    }
+
+    vvll grid(n, vll(m));
+    vvb onPath(n, vb(m, false));
+    int i = 0;
+    while (i < path.size()) {
+        auto &p = path[i];
+        onPath[p.first][p.second]=true;
+        i++;
+    }
+
+    i = 0;
+    while (i < n) {
+        int j = 0;
+        while (j < m) {
+            cin >>grid[i][j];
+            j++;
+        }
+        i++;
+    }
+
+    vll fixedRow(n, 0),fixedCol(m, 0);
+    i = 0;
+    while (i < n) {
+        int j = 0;
+        while (j < m) {
+            UPDATE_FIXED_ROW_COL(i, j); // Using the macro here
+            j++;
+        }
+        i++;
+    }
+
+    int V = n + m;
+    vll B(V, 0);
+    i = 0;
+    while (i < n) {
+        B[i] =-fixedRow[i];
+        i++;
+    }
+    int j = 0;
+    while (j < m) {
+        B[n + j] = -fixedCol[j];
+        j++;
+    }
+
+    int E = L;
+    vvpii adj(V);
+    i = 0;
+    while (i < L) {
+        auto pr =path[i];
+        ll u = pr.first,v = n+ pr.second;
+        ADD_EDGE(u, v, i); // Using the macro here
+        i++;
+    }
+
+    vi deg(V, 0);
+    i = 0;
+    while (i < V) {
+        deg[i] =adj[i].size();
+        i++;
+    }
+
+    vb usedEdge(E, false);
+    vll edgeVal(E, 0);
+    qi qu;
+    vb inQueue(V, false),removed(V, false);
+
+    i = 0;
+    while (i < V) {
+        PUSH_IF_DEGREE_ONE(i); // Using the macro here
+    }
+
+    while (!qu.empty()){
+        ll u = qu.front();
+        qu.pop();
+        PROCESS_QUEUE(u); // Using the macro here
+    }
+
+    i = 0;
+    while (i < L) {
+        UPDATE_GRID(i); // Using the macro here
+    }
+
+    i = 0;
+    while (i < n) {
+        j = 0;
+        while (j < m) {
+            PRINT_GRID_ELEMENT(i, j, m); // Using the macro here
+            j++;
+        }
+        i++;
+    }
 }
-
 
 int32_t main() {
     ios_base::sync_with_stdio(0);

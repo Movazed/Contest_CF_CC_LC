@@ -53,7 +53,7 @@ mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
 
-
+#define YES_NO(x) ((x) % 2 == 0 ? "YES" :"NO")
 // ----------------------</BITWISE>-------------------------- 
 /* a=target variable, b=bit number to act upon 0-n */
 #define BIT_SET(a,b) ((a) |= (1ULL<<(b)))
@@ -185,7 +185,10 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 void solve() {
 
+    ll n, a, b;
+    cin >> n >> a >> b;
 
+    cout << YES_NO(abs(a - b)) << "\n";
 }
 
 
