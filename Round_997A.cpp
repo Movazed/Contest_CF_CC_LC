@@ -16,6 +16,7 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #endif
 #define lli long long int
 #define ull unsigned long long
+#define vvb  vector<vector<bool>> 
 #define vii vector<pair<int, int>>
 #define vll vector<long long>
 #define vi vector<int>
@@ -27,6 +28,8 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define vi vector<int>
 #define vl vector<long>
 #define ar array
+#define spii set<pair<int, int>>
+#define spll set<pair<ll, ll>>
 #define mp make_pair
 #define ll long long
 #define ld long double
@@ -125,7 +128,6 @@ template <typename T> void Sieve(T a)
 isprime[1]=false;for(int i=2;i<N;i++){
 if(isprime[i]){prime[nprime++]=i;for(int j=2;i*j<N;j++)
 isprime[i*j]=false;}}}
-
 template <typename T> bool miller_rabin(T p, T itt) 
 {if(p<2) return 0 ;if(p==2) return 1;if(p%2==0) 
 return 0 ;unsigned long long s = p-1 ;while(s%2==0) s/=2;
@@ -151,7 +153,6 @@ template <typename T> inline T PointDistanceMinimum(T x1,T y1,T x2, T y2)
 T tmp4=min(tmp1, tmp2); return tmp3+tmp4; } 
 template <typename T> inline T PointDistance3D(T x1,T y1,T z1,T x2,T y2,T z2)
 {return sqrt(square(x2-x1)+square(y2-y1)+square(z2-z1));} 
- 
 template <typename T> inline T Cube(T a){return a*a*a;} 
 template <typename T> inline T RectengularPrism(T a,T b,T c)
 {return a*b*c;} 
@@ -177,37 +178,93 @@ template <typename T> inline T Cone (T radius,T base, T height)
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
 
-void solve() {
-        ll n;
-        cin >> n;
-        vector<ll> ans(n, 0);
-        ans[0] = 1;
-        ans[2] = 1;
-        ans[n - 1] = 1;
-        ll cur = 2;
-        for (ll i = 0; i < n; i++){
-            if (ans[i] == 0){
-                ans[i] = cur;
-                cur++;
-            }
-        }
-        for (ll x : ans)
-            cout << x << " ";
-        cout << "\n";
+#define PROCESS_RECTANGLE(size) \
+    cin >> delta_x >> delta_y; \
+    current_x += delta_x; \
+    current_y += delta_y; \
+    rectangles.push_back({current_x, current_y, current_x + size, current_y + size});
 
+
+#define PUSH_COORDS(rect) \
+    x_coords.push_back(rect[0]); \
+    x_coords.push_back(rect[2]); \
+    y_coords.push_back(rect[1]); \
+    y_coords.push_back(rect[3]);
+
+
+#define INIT_AND_PROCESS_GRID(grid, rectangles, x_coords, y_coords) \
+    int grid_width = x_coords.size(), grid_height = y_coords.size(); \
+    grid.resize(grid_width - 1, vector<bool>(grid_height - 1, false)); \
+    for (auto &rect : rectangles) { \
+        int x1 = rect[0], y1 = rect[1], x2 = rect[2], y2 = rect[3]; \
+        int idx_x1 = lower_bound(all(x_coords), x1) - x_coords.begin(); \
+        int idx_x2 = lower_bound(all(x_coords), x2) - x_coords.begin(); \
+        int idx_y1 = lower_bound(all(y_coords), y1) - y_coords.begin(); \
+        int idx_y2 = lower_bound(all(y_coords), y2) - y_coords.begin(); \
+        for (int i = idx_x1; i < idx_x2; i++) { \
+            for (int j = idx_y1; j < idx_y2; j++) { \
+                grid[i][j] = true; \
+            } \
+        } \
+    }
+
+void solve() {
+    ll num_rectangles, size;
+    cin >> num_rectangles >> size;
+    vector<array<ll, 4>> rectangles;
+    ll current_x = 0, current_y = 0;
+    ll delta_x, delta_y;
+
+    ll i = 0;
+    while (i < num_rectangles) {
+        PROCESS_RECTANGLE(size);
+        i++;
+    }
+
+    vll x_coords, y_coords;
+    for (auto &rect : rectangles) {
+        PUSH_COORDS(rect);
+    }
+
+    sort(all(x_coords));
+    x_coords.erase(unique(all(x_coords)), x_coords.end());
+    sort(all(y_coords));
+    y_coords.erase(unique(all(y_coords)), y_coords.end());
+
+    vvb grid;
+    INIT_AND_PROCESS_GRID(grid, rectangles, x_coords, y_coords);
+
+    ll total_perimeter = 0;
+    ll i_perim = 0;
+    while (i_perim < grid.size()) {
+        ll j_perim = 0;
+        while (j_perim < grid[0].size()) {
+            total_perimeter += (!grid[i_perim][j_perim]) ? 0 : (
+                (i_perim == 0 || !grid[i_perim - 1][j_perim]) ? (y_coords[j_perim + 1] - y_coords[j_perim]) : 0
+            ) + (
+                (i_perim == grid.size() - 1 || !grid[i_perim + 1][j_perim]) ? (y_coords[j_perim + 1] - y_coords[j_perim]) : 0
+            ) + (
+                (j_perim == 0 || !grid[i_perim][j_perim - 1]) ? (x_coords[i_perim + 1] - x_coords[i_perim]) : 0
+            ) + (
+                (j_perim == grid[0].size() - 1 || !grid[i_perim][j_perim + 1]) ? (x_coords[i_perim + 1] - x_coords[i_perim]) : 0
+            );
+            j_perim++;
+        }
+        i_perim++;
+    }
+    cout << total_perimeter << "\n";
 }
 
 
 int32_t main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-    precompute_factorials(); 
+    fastio;
     int tc = 1;
     cin >> tc;
     for (int t = 1; t <= tc; t++) {

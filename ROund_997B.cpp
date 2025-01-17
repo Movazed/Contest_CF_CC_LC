@@ -15,10 +15,13 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define dbg(...)
 #endif
 #define lli long long int
+#define fill_iota(v, start) iota(v.begin(), v.end(), start)
 #define ull unsigned long long
 #define vii vector<pair<int, int>>
+#define vs vector<string>
 #define vll vector<long long>
 #define vi vector<int>
+#define GET_VALUE(node, is_last) cout << node << (is_last ? "\n" : " ")
 #define vl vector<long>
 #define ar array
 #define ull unsigned long long
@@ -184,23 +187,28 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void solve() {
-        ll n;
-        cin >> n;
-        vector<ll> ans(n, 0);
-        ans[0] = 1;
-        ans[2] = 1;
-        ans[n - 1] = 1;
-        ll cur = 2;
-        for (ll i = 0; i < n; i++){
-            if (ans[i] == 0){
-                ans[i] = cur;
-                cur++;
-            }
-        }
-        for (ll x : ans)
-            cout << x << " ";
-        cout << "\n";
+    ll num_nodes;
+    cin >> num_nodes;
+    vs adjacency_matrix(num_nodes);
 
+    ll index = 0;
+    while (index < num_nodes) {
+        cin >> adjacency_matrix[index];
+        index++;
+    }
+
+    vll node_order(num_nodes);
+    fill_iota(node_order, 0); 
+
+    sort(node_order.begin(), node_order.end(), [&](ll node1, ll node2) {
+        return (node1 < node2) ? adjacency_matrix[node1][node2] == '1' : adjacency_matrix[node2][node1] == '0';
+    });
+
+    index = 0;
+    while (index < num_nodes) {
+       GET_VALUE(node_order[index] + 1, index + 1 == num_nodes);
+        index++;
+    }
 }
 
 

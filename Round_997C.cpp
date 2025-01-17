@@ -47,6 +47,9 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define COMPARE_FACTORS(p1, p2) (m_fact[p1].first == a_fact[p2].first)
 #define IF_LESS_THAN(p1, p2) (m_fact[p1].first < a_fact[p2].first)
 #define FORR(i, a, b) for(int i = a; i >= b; i--)
+#define SET_ANS_0(ans) ans[0] = 1
+#define SET_ANS_2(ans) ans[2] = 1
+#define SET_ANS_N_MINUS_1(ans, n) ans[n - 1] = 1
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
@@ -184,23 +187,29 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void solve() {
-        ll n;
-        cin >> n;
-        vector<ll> ans(n, 0);
-        ans[0] = 1;
-        ans[2] = 1;
-        ans[n - 1] = 1;
-        ll cur = 2;
-        for (ll i = 0; i < n; i++){
-            if (ans[i] == 0){
-                ans[i] = cur;
-                cur++;
-            }
-        }
-        for (ll x : ans)
-            cout << x << " ";
-        cout << "\n";
-
+    ll size;
+    cin >> size;
+    vll result(size, 0);
+    
+    SET_ANS_0(result);
+    SET_ANS_2(result);
+    SET_ANS_N_MINUS_1(result, size);
+    
+    ll currentValue = 2;
+    ll index = 0;
+    
+    while (index < size) {
+        result[index] = (result[index] == 0) ? currentValue++ : result[index];
+        index++;
+    }
+    
+    index = 0;
+    
+    while (index < size) {
+        cout << result[index] << " ";
+        index++;
+    }
+    cout << "\n";
 }
 
 
