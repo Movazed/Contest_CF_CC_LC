@@ -184,11 +184,62 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void solve() {
+    ll n, m, k;
+    cin >> n >> m >> k;
 
+    vll a(n), b(m);
+
+    // Read array a
+    for (ll i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    // Read array b
+    for (ll i = 0; i < m; i++) {
+        cin >> b[i];
+    }
+
+    // Precompute the mask values
+    vll msk(1 << m, -1);
+    for (ll i = 0; i < (1 << m); i++) {
+        for (ll j = 0; j < m; j++) {
+            if (i & (1 << j)) {
+                msk[i] &= b[j];
+            }
+        }
+    }
+
+    // Compute the differences
+    vll diff;
+    for (ll i = 0; i < n; i++) {
+        vll ans(m + 1, 0);
+        for (ll mask = 0; mask < (1 << m); mask++) {
+            ll cnt = __builtin_popcount(mask);
+            ans[cnt] = max(ans[cnt], (a[i] & ~msk[mask]));
+        }
+
+        for (ll j = 1; j <= m; j++) {
+            diff.push_back(ans[j] - ans[j - 1]);
+        }
+    }
+
+    // Sort the differences in descending order
+    sort(rall(diff));
+
+    // Calculate the total sum of array a
+    ll total = 0;
+    for (ll i = 0; i < n; i++) {
+        total += a[i];
+    }
+
+    // Subtract the top k differences from the total
+    for (ll i = 0; i < min(k, (ll)diff.size()); i++) {
+        total -= diff[i];
+    }
+
+    // Output the result
+    cout << total << nl;
 }
-
-
-
 
 int32_t main() {
     ios_base::sync_with_stdio(0);
@@ -200,3 +251,4 @@ int32_t main() {
         solve();
     }
 }
+

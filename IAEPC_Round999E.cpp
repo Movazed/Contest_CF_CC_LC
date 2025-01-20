@@ -173,10 +173,13 @@ template <typename T> inline T Cone (T radius,T base, T height)
 #define len(x) int((x).size())
 #define pb push_back
 #define rall(n) n.rbegin(),n.rend()
-
+#define CHECK_BIT(mask, j) ((mask) & (1 << (j)))
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
+#define UPDATE_ANS(mask, ans, a, msk, cnt) \
+    cnt= __builtin_popcount(mask); \
+    ans[cnt]= max(ans[cnt], (a & ~msk[mask])); \
+    mask++;
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
@@ -184,11 +187,60 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void solve() {
+    ll n;
+    ll m;
+    ll k;
 
+    INPUT >> n >> m >> k;
+    vll a(n), b(m);
+
+    ll i = 0;
+    while (i < n) {
+        INPUT >> a[i];
+        i++;
+    }
+
+    i = 0;
+    while (i < m) {
+        INPUT >> b[i];
+        i++;
+    }
+
+vll msk(1 << m, -1);i = 0;
+    while (i < (1 << m)) {
+        ll j = 0;
+        while (j < m) {
+            if (CHECK_BIT(i, j)) {msk[i] &= b[j];}
+            j++;
+        }
+        i++;
+    }
+
+    vll diff;
+    i = 0;
+    while (i < n) {vll ans(m + 1, 0);ll mask = 0;
+        while (mask < (1 << m)) {
+            ll cnt;
+            UPDATE_ANS(mask, ans, a[i], msk, cnt);
+        }
+
+        ll j = 1;
+        while (j <= m) {diff.pb(ans[j] - ans[j - 1]);j++;
+        }
+        i++;
+    }sort(rall(diff));
+
+    ll total = 0;
+    i = 0;
+    while (i < n) {total += a[i];
+        i++;
+    }
+
+    i = 0;
+    while (i < min(k,(ll)diff.size())) {total -= diff[i];
+        i++;
+    }cout << total << nl;
 }
-
-
-
 
 int32_t main() {
     ios_base::sync_with_stdio(0);

@@ -184,7 +184,22 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void solve() {
-
+        ll n;
+        cin >> n;
+        vll a(n);
+        ll even = 0;
+        for (ll i = 0; i < n; i++) {
+            cin >> a[i];
+            if (a[i] % 2 == 0) {
+                even++;
+            }
+        }
+        ll odd = n - even;
+        if (even >= 1) {
+            cout << 1 + odd << endl;
+        } else {
+            cout << odd - 1 << endl;
+        }
 }
 
 

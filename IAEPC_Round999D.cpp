@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 
 using namespace std;
 
@@ -355,7 +355,7 @@ inline T Cone(T radius, T base, T height)
 
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
+#define OPTIMIZE_IO ios_base:: sync_with_stdio(0); cin.tie(0); cout.tie(0);
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
@@ -404,11 +404,9 @@ void solve()
     (F && q.empty()) ? cout << "Yes\n" : cout << "No\n";
 }
 
-int32_t main()
+signed main()
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+    OPTIMIZE_IO;
     precompute_factorials();
     int tc = 1;
     cin >> tc;

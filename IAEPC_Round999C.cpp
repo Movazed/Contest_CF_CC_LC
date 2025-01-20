@@ -173,7 +173,8 @@ template <typename T> inline T Cone (T radius,T base, T height)
 #define len(x) int((x).size())
 #define pb push_back
 #define rall(n) n.rbegin(),n.rend()
-
+#define UPDATE_CL(j) if (pH[j] > 0) { cL[j+1] = (cL[j+1] + pH[j]) % MOD; }
+#define UPDATE_CH(x, wH) if (x <= n) { cH[x] = wH; }
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
@@ -182,11 +183,60 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
+const int mod = 998244353;
 void solve() {
+    ll n;
+    cin >> n;
+    vll v(n);
+    ll i = 0;
+    while (i < n) {
+        cin >> v[i];
+        ++i;
+    }
 
+    vll pH(n+1, 0); 
+    vll pL(n+1, 0); 
+    pH[0] = 1;
+    
+    i = 1;
+    while (i <= n) {
+        ll x = v[i-1]; 
+
+        ll wH = 0; 
+        if (x <= n) {
+            wH = (pH[x] + pL[x]) % mod;
+        }
+
+        vll cH(n+1, 0);
+        UPDATE_CH(x, wH); 
+
+        vll cL(n+1, 0); 
+
+        ll j = 0; 
+        while (j <= n) {
+            UPDATE_CL(j); 
+            ++j;
+        }
+
+        pH = move(cH);
+        pL = move(cL);
+        ++i;
+    }
+
+    ll res = 0; 
+    i = 0;
+    while (i < pH.size()) {
+        res = (res + pH[i]) % mod;
+        ++i;
+    }
+    i = 0;
+    while (i < pL.size()) {
+        res = (res + pL[i]) % mod;
+        ++i;
+    }
+
+    cout << res << nl;
 }
-
 
 
 
@@ -200,3 +250,4 @@ int32_t main() {
         solve();
     }
 }
+

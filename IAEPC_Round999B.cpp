@@ -182,12 +182,107 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
 void solve() {
+    ll n;
+    cin >> n;
+    vll a(n);
+    for (ll i = 0; i < n; i++) {
+        cin >> a[i];
+    }
 
+    sort(all(a));
+
+
+    vector<ll> pairs;
+    for (ll i = 0; i < n; ) {
+        if (i + 1 < n && a[i] == a[i+1]) {
+            pairs.push_back(a[i]);
+            i += 2;
+        } else {
+            i++;
+        }
+    }
+    if (pairs.size() >= 2) {
+        cout << pairs[0] << " " << pairs[0] << " " << pairs[1] << " " << pairs[1] << endl;
+        return;
+    }
+
+    for (ll i = 0; i < n; ) {
+        if (i + 1 < n && a[i] == a[i+1]) {
+            ll current_a = a[i];
+            ll count_a = 0;
+            ll j = i;
+            while (j < n && a[j] == current_a) {
+                j++;
+                count_a++;
+            }
+            if (count_a >= 3) {
+
+                if (i > 0) {
+                    cout << current_a << " " << current_a << " " << current_a << " " << a[i-1] << endl;
+                    return;
+                }
+
+                if (j < n) {
+                    ll x = a[j];
+                    if (x < 3 * current_a) {
+                        cout << current_a << " " << current_a << " " << current_a << " " << x << endl;
+                        return;
+                    }
+                }
+
+                for (ll k = j; k < n; k++) {
+                    if (a[k] < 3 * current_a) {
+                        cout << current_a << " " << current_a << " " << current_a << " " << a[k] << endl;
+                        return;
+                    }
+                }
+            }
+            i = j;
+        } else {
+            i++;
+        }
+    }
+
+
+    for (ll i = 0; i < n; ) {
+        if (i + 1 < n && a[i] == a[i+1]) {
+            ll current_a = a[i];
+            ll needed_diff = 2 * current_a;
+
+            if (i >= 2) {
+                for (ll j = 1; j < i; j++) {
+                    if (a[j] - a[j-1] < needed_diff) {
+                        cout << current_a << " " << current_a << " " << a[j-1] << " " << a[j] << endl;
+                        return;
+                    }
+                }
+            }
+
+
+            for (ll j = i+3; j < n; j++) {
+                if (a[j] - a[j-1] < needed_diff) {
+                    cout << current_a << " " << current_a << " " << a[j-1] << " " << a[j] << endl;
+                    return;
+                }
+            }
+
+
+            if (i > 0 && i+2 < n) {
+                if (a[i+2] - a[i-1] < needed_diff) {
+                    cout << current_a << " " << current_a << " " << a[i-1] << " " << a[i+2] << endl;
+                    return;
+                }
+            }
+
+            i += 2;
+        } else {
+            i++;
+        }
+    }
+
+    cout << -1 << endl;
 }
-
-
 
 
 int32_t main() {
@@ -200,3 +295,4 @@ int32_t main() {
         solve();
     }
 }
+
