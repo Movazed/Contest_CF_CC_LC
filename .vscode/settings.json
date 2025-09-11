@@ -1,40 +1,21 @@
 {
     "files.associations": {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 3da69ac (The commit)
         "sstream": "cpp",
         "regex": "cpp",
         "iostream": "cpp",
         "ostream": "cpp",
         "array": "cpp",
-<<<<<<< HEAD
-=======
-=======
-        "ostream": "cpp",
         "deque": "cpp",
         "string": "cpp",
         "vector": "cpp",
         "chrono": "cpp",
         "type_traits": "cpp",
-        "array": "cpp",
         "list": "cpp",
->>>>>>> dfc981a (The commit)
->>>>>>> 3da69ac (The commit)
         "atomic": "cpp",
         "*.tcc": "cpp",
         "bitset": "cpp",
         "cctype": "cpp",
         "cfenv": "cpp",
-<<<<<<< HEAD
-        "chrono": "cpp",
-=======
-<<<<<<< HEAD
-        "chrono": "cpp",
-=======
->>>>>>> dfc981a (The commit)
->>>>>>> 3da69ac (The commit)
         "cinttypes": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
@@ -53,24 +34,9 @@
         "cuchar": "cpp",
         "cwchar": "cpp",
         "cwctype": "cpp",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 3da69ac (The commit)
-        "deque": "cpp",
-        "forward_list": "cpp",
-        "list": "cpp",
-        "unordered_map": "cpp",
-        "unordered_set": "cpp",
-        "vector": "cpp",
-<<<<<<< HEAD
-=======
-=======
         "forward_list": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
->>>>>>> dfc981a (The commit)
->>>>>>> 3da69ac (The commit)
         "exception": "cpp",
         "algorithm": "cpp",
         "functional": "cpp",
@@ -81,55 +47,56 @@
         "numeric": "cpp",
         "random": "cpp",
         "ratio": "cpp",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 3da69ac (The commit)
-        "set": "cpp",
-        "string": "cpp",
-        "system_error": "cpp",
-        "tuple": "cpp",
-        "type_traits": "cpp",
-<<<<<<< HEAD
-=======
-=======
-        "regex": "cpp",
         "set": "cpp",
         "system_error": "cpp",
         "tuple": "cpp",
->>>>>>> dfc981a (The commit)
->>>>>>> 3da69ac (The commit)
         "utility": "cpp",
         "fstream": "cpp",
         "future": "cpp",
         "initializer_list": "cpp",
         "iomanip": "cpp",
         "iosfwd": "cpp",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-        "iostream": "cpp",
->>>>>>> dfc981a (The commit)
->>>>>>> 3da69ac (The commit)
         "istream": "cpp",
         "limits": "cpp",
         "mutex": "cpp",
         "new": "cpp",
         "scoped_allocator": "cpp",
         "shared_mutex": "cpp",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-        "sstream": "cpp",
->>>>>>> dfc981a (The commit)
->>>>>>> 3da69ac (The commit)
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "thread": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "flat_map": "cpp",
+        "flat_set": "cpp",
+        "barrier": "cpp",
+        "latch": "cpp",
+        "semaphore": "cpp",
+        "any": "cpp",
+        "bit": "cpp",
+        "charconv": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "coroutine": "cpp",
+        "expected": "cpp",
+        "optional": "cpp",
+        "source_location": "cpp",
+        "string_view": "cpp",
+        "format": "cpp",
+        "generator": "cpp",
+        "numbers": "cpp",
+        "print": "cpp",
+        "queue": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "spanstream": "cpp",
+        "stack": "cpp",
+        "stacktrace": "cpp",
+        "stdfloat": "cpp",
+        "stop_token": "cpp",
+        "syncstream": "cpp",
+        "text_encoding": "cpp",
+        "variant": "cpp"
     }
 }

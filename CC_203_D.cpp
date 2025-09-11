@@ -140,7 +140,50 @@ and i<nprime;i++){cnt=0;while(n%prime[i]==0)
 {cnt++;n/=prime[i];}sum*=(cnt+1);}
 if(n>1)sum*=2;return sum;} 
 /****************** Prime Generator End **********************/ 
-
+#define movazed \
+void solve() { \
+    int N; \
+    cin >> N; \
+    vector<long long> a(N); \
+    for (int i = 0; i < N; ++i) cin >> a[i]; \
+    sort(a.begin(), a.end()); \
+    vector<long long> pre(N + 1, 0); \
+    for (int i = 0; i < N; ++i) pre[i + 1] = pre[i] + a[i]; \
+    long long sumAll = pre[N]; \
+    long long bestGain = 0; \
+    for (int i = 0; i < N; ) { \
+        int j = i; \
+        while (j + 1 < N && a[j + 1] == a[i]) ++j; \
+        long long v = a[i]; \
+        int L = i, R = j; \
+        int c_eq = R - L + 1; \
+        int base_l = min(L, c_eq - 1); \
+        long long base_gain = v * base_l - pre[base_l]; \
+        \
+        int T1 = L - base_l; \
+        int T2 = N - 1 - R; \
+        int Tpairs = min(T1, T2); \
+        \
+        long long add_gain = 0; \
+        if (Tpairs > 0) { \
+            int lo = 1, hi = Tpairs, ans = 0; \
+            while (lo <= hi) { \
+                int mid = (lo + hi) >> 1; \
+                long long s = 2LL * v - a[base_l + mid - 1] - a[R + mid]; \
+                if (s > 0) { ans = mid; lo = mid + 1; } \
+                else hi = mid - 1; \
+            } \
+            if (ans > 0) { \
+                long long leftSum = pre[base_l + ans] - pre[base_l]; \
+                long long rightSum = pre[R + 1 + ans] - pre[R + 1]; \
+                add_gain = 2LL * ans * v - leftSum - rightSum; \
+            } \
+        } \
+        bestGain = max(bestGain, base_gain + add_gain); \
+        i = j + 1; \
+    } \
+    cout << sumAll + bestGain << "\n"; \
+}
 /****************** Geometry *****************/ 
 template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
 {return abs(x1-x2)+abs(y1-y2);} 
@@ -182,12 +225,7 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
-
-
-void solve() {
-
-}
+movazed
 
 int32_t main() {
     ios_base::sync_with_stdio(0);

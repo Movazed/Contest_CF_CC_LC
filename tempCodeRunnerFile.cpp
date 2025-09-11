@@ -1,101 +1,63 @@
+const int N=1e7+10; int prime[20000010]; 
+bool isprime[N]; int nprime; 
+template <typename T> void Sieve(T a) 
+{nprime = 0;memset(isprime,true,sizeof(isprime));
+isprime[1]=false;for(int i=2;i<N;i++){
+if(isprime[i]){prime[nprime++]=i;for(int j=2;i*j<N;j++)
+isprime[i*j]=false;}}}
 
-static const long long MOD = 998244353LL;
+template <typename T> bool miller_rabin(T p, T itt) 
+{if(p<2) return 0 ;if(p==2) return 1;if(p%2==0) 
+return 0 ;unsigned long long s = p-1 ;while(s%2==0) s/=2;
+for(ll i=1;i<=itt;i++) {unsigned long long a = rand() % (p-1)+1 , temp = s ;
+unsigned long long mod = mulmod(a,temp,(unsigned long long)p);while(mod!=1 and mod!=p-1 
+and temp!=p-1){mod = mulmod(mod,mod,(unsigned long long)p);temp*=2;}
+if(temp%2==0 and mod!=p-1) return false ;}return true;} 
 
-static inline long long modReduce(__int128 x) {
-    x %= MOD;
-    if (x < 0) x += MOD;
-    return (long long)x;
-}
+template <typename T> inline T PrimeFactors(T n)
+{ll cnt=0,sum=1;for(int i=0; prime[i]*prime[i]<=n 
+and i<nprime;i++){cnt=0;while(n%prime[i]==0)
+{cnt++;n/=prime[i];}sum*=(cnt+1);}
+if(n>1)sum*=2;return sum;} 
+/****************** Prime Generator End **********************/ 
 
-static inline __int128 sum1_range(long long a, long long b) {
-    if (a > b) return 0;
-    __int128 n = (__int128)b - a + 1;
-    return (__int128)(a + b) * n / 2;
-}
+/****************** Geometry *****************/ 
+template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
+{return abs(x1-x2)+abs(y1-y2);} 
+template <typename T> inline T PointDistanceDiagonally(T x1,T y1,T x2, T y2) 
+{return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));} 
+template <typename T> inline T PointDistanceMinimum(T x1,T y1,T x2, T y2) 
+{ T tmp1=abs(x1-x2); T tmp2=abs(y1-y2); T tmp3=abs(tmp1-tmp2); 
+T tmp4=min(tmp1, tmp2); return tmp3+tmp4; } 
+template <typename T> inline T PointDistance3D(T x1,T y1,T z1,T x2,T y2,T z2)
+{return sqrt(square(x2-x1)+square(y2-y1)+square(z2-z1));} 
+ 
+template <typename T> inline T Cube(T a){return a*a*a;} 
+template <typename T> inline T RectengularPrism(T a,T b,T c)
+{return a*b*c;} 
+template <typename T> inline T Pyramid(T base, T height)
+{return (1/3)*base*height;} 
+template <typename T> inline T Ellipsoid(T r1,T r2,T r3) 
+{return (4/3)*PI*r1*r2*r3;} 
+template <typename T> inline T IrregualarPrism(T base, T height)
+{return base*height;} 
+template <typename T> inline T Sphere(T radius)
+{ return (4/3)*PI*radius*radius*radius;} 
+template <typename T> inline T CylinderB(T base, T height)
+{return base*height;} // base and height 
+template <typename T> inline T CylinderR(T radius, T height)
+{return PI*radius*radius*height;} // radius and height 
+template <typename T> inline T Cone (T radius,T base, T height)
+{return (1/3)*PI*radius*radius*height;} 
+/****************** Geometry end *****************/ 
+#define len(x) int((x).size())
+#define pb push_back
+#define rall(n) n.rbegin(),n.rend()
 
-static inline __int128 sum2_prefix(long long x) {
-    if (x <= 0) return 0;
-    return (__int128)x * (x + 1) * (2 * x + 1) / 6;
-}
+// Constants
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
-static inline __int128 sum2_range(long long a, long long b) {
-    if (a > b) return 0;
-    return sum2_prefix(b) - sum2_prefix(a - 1);
-}
-
-static long long compute_S_L(long long N, long long L) {
-    if (L <= 1) return 0;
-    long long u = L - 1;
-    long long Kmax = (N - 1) / u;
-    __int128 triN = (__int128)N * (N + 1) / 2;
-    __int128 res = 0;
-
-    for (long long k = 0; k <= Kmax; ++k) {
-        long long s = k * u + 1;
-        long long e0 = min((k + 1) * u, N);
-        if (s > e0) continue;
-
-        long long a1 = s;
-        long long b1 = min(e0, N - k);
-        if (a1 <= b1) {
-            long long n1 = b1 - a1 + 1;
-            __int128 sumA  = sum1_range(a1, b1);
-            __int128 sumA2 = sum2_range(a1, b1);
-
-            __int128 sum_llp1 = sumA2 + (__int128)(2 * k + 1) * sumA + (__int128)n1 * ((__int128)k * k + k);
-            __int128 part1 = (__int128)u * (sum_llp1 / 2);
-            __int128 part2 = (__int128)L * ( (__int128)N * sumA - sumA2 - (__int128)k * sumA );
-            res += part1 + part2;
-        }
-
-        long long a2 = max(s, N - k + 1);
-        long long b2 = e0;
-        if (a2 <= b2) {
-            long long n2 = b2 - a2 + 1;
-            res += (__int128)n2 * u * triN;
-        }
-    }
-    return modReduce(res);
-}
-
-void solve() {
-    int N;
-    cin >> N;
-    vector<int> P(N + 1);
-    for (int i = 1; i <= N; ++i) cin >> P[i];
-
-    vector<char> vis(N + 1, 0);
-    vector<long long> cnt(N + 1, 0);
-    for (int i = 1; i <= N; ++i) {
-        if (!vis[i]) {
-            int v = i, len = 0;
-            while (!vis[v]) {
-                vis[v] = 1;
-                v = P[v];
-                ++len;
-            }
-            cnt[len]++;
-        }
-    }
-
-    long long ans = 0;
-    for (int L = 2; L <= N; ++L) {
-        if (cnt[L] == 0) continue;
-        long long SL = compute_S_L(N, L);
-        __int128 add = (__int128)(cnt[L] % MOD) * SL % MOD;
-        ans += (long long)add;
-        if (ans >= MOD) ans -= MOD;
-    }
-    cout << ans % MOD << '\n';
-}
-
-int32_t main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-
-    int tc = 1;
-    cin >> tc;
-    for (int t = 1; t <= tc; t++) {
-        solve();
-    }
-}
+// Helper Functions
+bool odd(ll num) { return ((num & 1) == 1); }
+bool even(ll num) { return ((num & 1) == 0); }
+ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }

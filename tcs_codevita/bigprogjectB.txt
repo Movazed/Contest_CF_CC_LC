@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct PendingTxn {
+    int id;
+    long long delta;
+    bool active;
+};
+
+int32_t main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    long long balance;
+    if (!(cin >> balance)) return 0;
+    int N;
+    cin >> N;
+    string op;
+
+    vector<long long> commit_balance;
+    vector<int> commit_txn_counts;
+    vector<PendingTxn> pending;
+
+    int total_txn = 0;
+    int committed_txn_count = 0;
+    bool printed = false;
+
+    for (int i = 0; i < N; ++i) {
+        cin >> op;
+        if (op == "read") {
+            if (printed) cout << '\n';
+            cout << balance;
+            printed = true;
+        } else if (op == "credit" || op == "debit") {
+            long long x; cin >> x;
+            ++total_txn;
+            long long delta = (op == "credit") ? x : -x;
+            balance += delta;
+            pending.push_back({total_txn, delta, true});
+        } else if (op == "abort") {
+            int X; cin >> X;
+            if (X > committed_txn_count) {
+                for (auto &t : pending) {
+                    if (t.id == X && t.active) {
+                        balance -= t.delta;
+                        t.active = false;
+                        break;
+                    }
+                }
+            }
+        } else if (op == "commit") {
+            commit_balance.push_back(balance);
+            commit_txn_counts.push_back(total_txn);
+            committed_txn_count = total_txn;
+            pending.clear();
+        } else if (op == "rollback") {
+            int X; cin >> X;
+            long long b = commit_balance[X-1];
+            int txn_cnt = commit_txn_counts[X-1];
+            balance = b;
+            total_txn = txn_cnt;
+            committed_txn_count = txn_cnt;
+            pending.clear();
+            commit_balance.resize(X);
+            commit_txn_counts.resize(X);
+        }
+    }
+
+    return 0;
+}

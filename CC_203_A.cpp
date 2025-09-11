@@ -140,7 +140,13 @@ and i<nprime;i++){cnt=0;while(n%prime[i]==0)
 {cnt++;n/=prime[i];}sum*=(cnt+1);}
 if(n>1)sum*=2;return sum;} 
 /****************** Prime Generator End **********************/ 
-
+#define MOVAZED \
+    void solve() { \
+        ll N; \
+        cin >> N; \
+        ll ans = max(200LL, 100LL * N); \
+        cout << ans << '\n'; \
+    }
 /****************** Geometry *****************/ 
 template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
 {return abs(x1-x2)+abs(y1-y2);} 
@@ -182,12 +188,7 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
-
-
-void solve() {
-
-}
+MOVAZED
 
 int32_t main() {
     ios_base::sync_with_stdio(0);

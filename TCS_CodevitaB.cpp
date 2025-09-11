@@ -140,7 +140,48 @@ and i<nprime;i++){cnt=0;while(n%prime[i]==0)
 {cnt++;n/=prime[i];}sum*=(cnt+1);}
 if(n>1)sum*=2;return sum;} 
 /****************** Prime Generator End **********************/ 
-
+bool printed=false;
+#define PROCESS_OPS \
+    for (int i = 0; i < N; ++i) { \
+        cin >> op; \
+        if (op == "read") { \
+            if (printed) cout << '\n'; \
+            cout << balance; \
+            printed = true; \
+        } else if (op == "credit" || op == "debit") { \
+            long long x; cin >> x; \
+            ++total_txn; \
+            long long delta = (op == "credit") ? x : -x; \
+            balance += delta; \
+            pending.push_back({total_txn, delta, true}); \
+        } else if (op == "abort") { \
+            int X; cin >> X; \
+            if (X > committed_txn_count) { \
+                for (auto &t : pending) { \
+                    if (t.id == X && t.active) { \
+                        balance -= t.delta; \
+                        t.active = false; \
+                        break; \
+                    } \
+                } \
+            } \
+        } else if (op == "commit") { \
+            commit_balance.push_back(balance); \
+            commit_txn_counts.push_back(total_txn); \
+            committed_txn_count = total_txn; \
+            pending.clear(); \
+        } else if (op == "rollback") { \
+            int X; cin >> X; \
+            long long b = commit_balance[X-1]; \
+            int txn_cnt = commit_txn_counts[X-1]; \
+            balance = b; \
+            total_txn = txn_cnt; \
+            committed_txn_count = txn_cnt; \
+            pending.clear(); \
+            commit_balance.resize(X); \
+            commit_txn_counts.resize(X); \
+        } \
+    }
 /****************** Geometry *****************/ 
 template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
 {return abs(x1-x2)+abs(y1-y2);} 
@@ -174,6 +215,8 @@ template <typename T> inline T Cone (T radius,T base, T height)
 #define pb push_back
 #define rall(n) n.rbegin(),n.rend()
 
+struct PendingTxn {int id;ll delta;bool active;       
+};
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
@@ -182,20 +225,32 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
-
-
-void solve() {
-
-}
+#define input cin
 
 int32_t main() {
     ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
+    cin.tie(0);
 
-    int tc = 1;
-    cin >> tc;
-    for (int t = 1; t <= tc; t++) {
-        solve();
+    ll balance;
+    if (!(cin >> balance)) return 0;
+    int N;
+    cin >> N;
+    string op;
+
+    vll commit_balance;
+    vi commit_txn_counts;
+    vector<PendingTxn> pending;
+    vll outputs;
+
+    int total_txn = 0;
+    int committed_txn_count = 0;
+
+    PROCESS_OPS;
+
+    for (size_t i = 0; i < outputs.size(); i++) {
+        cout << outputs[i];
+        if (i + 1 < outputs.size()) cout << '\n';
     }
+
+    return 0;
 }

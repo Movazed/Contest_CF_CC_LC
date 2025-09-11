@@ -140,7 +140,26 @@ and i<nprime;i++){cnt=0;while(n%prime[i]==0)
 {cnt++;n/=prime[i];}sum*=(cnt+1);}
 if(n>1)sum*=2;return sum;} 
 /****************** Prime Generator End **********************/ 
-
+#define movazed \
+    int N; \
+    cin >> N; \
+    int M = N * (N - 1) / 2; \
+    vector<int> W(M); \
+    int i = 0; \
+    while (i < M) { \
+        cin >> W[i]; \
+        i++; \
+    } \
+    sort(all(W)); \
+    int ans = 0; \
+    int idx = 0; \
+    int j = 1; \
+    while (j <= N - 1) { \
+        ans += W[idx]; \
+        idx += j; \
+        j++; \
+    } \
+    cout << ans << endl;
 /****************** Geometry *****************/ 
 template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
 {return abs(x1-x2)+abs(y1-y2);} 
@@ -182,11 +201,8 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
-
-
 void solve() {
-
+movazed
 }
 
 int32_t main() {

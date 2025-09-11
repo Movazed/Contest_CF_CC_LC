@@ -1,8 +1,7 @@
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-#pragma GCC optimize("Ofast,unroll-loops") 
+
 //#pragma GCC target("avx,avx2,avx512,fma") 
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
@@ -47,13 +46,14 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define COMPARE_FACTORS(p1, p2) (m_fact[p1].first == a_fact[p2].first)
 #define IF_LESS_THAN(p1, p2) (m_fact[p1].first < a_fact[p2].first)
 #define FORR(i, a, b) for(int i = a; i >= b; i--)
+#define fastio ios::sync_with_stdio(false); cin.tie(nullptr)
+#define rep(i,a,b) for(int i=(a); i<(b); ++i)
+#pragma GCC optimize("Ofast,unroll-loops") 
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
-
-
 // ----------------------</BITWISE>-------------------------- 
 /* a=target variable, b=bit number to act upon 0-n */
 #define BIT_SET(a,b) ((a) |= (1ULL<<(b)))
@@ -116,7 +116,40 @@ void precompute_factorials() {
     }
 }
 // ----------------------</MATH>-------------------------- 
-
+#define INIT_PART \
+    vector<string> g(M, string(N, '0')); \
+    vector<pair<int,int>> start, goal; \
+    rep(i,0,M) rep(j,0,N) { \
+        string t; cin >> t; \
+        char ch = t[0]; \
+        g[i][j] = ch; \
+        if (ch == 's') start.push_back({i,j}); \
+        if (ch == 'S') goal.push_back({i,j}); \
+    } \
+    auto inb = [&](int r, int c){ return r>=0 && r<M && c>=0 && c<N; }; \
+    auto freeCell = [&](int r, int c){ return inb(r,c) && g[r][c] != 'H'; }; \
+    auto id = [&](int r, int c){ return r*N + c; }; \
+    if (start.size()!=2 || goal.size()!=2) { cout << "Impossible\n"; return 0; } \
+    int sa = id(start[0].first, start[0].second); \
+    int sb = id(start[1].first, start[1].second); \
+    if (sa > sb) swap(sa, sb); \
+    int ga = id(goal[0].first, goal[0].second); \
+    int gb = id(goal[1].first, goal[1].second); \
+    if (ga > gb) swap(ga, gb); \
+    auto adj = [&](int A, int B){ \
+        int r1=A/N, c1=A%N, r2=B/N, c2=B%N; \
+        return (abs(r1-r2)+abs(c1-c2))==1; \
+    }; \
+    if (!adj(sa,sb) || !adj(ga,gb)) { cout << "Impossible\n"; return 0; } \
+    int TOT = M*N; \
+    vector<char> vis((size_t)TOT * (size_t)TOT, 0); \
+    auto mark = [&](int a, int b){ vis[a*TOT + b] = 1; }; \
+    auto seen = [&](int a, int b){ return vis[a*TOT + b]; }; \
+    auto push = [&](queue<Node>&q, int a, int b, int d){ \
+        if (a>b) swap(a,b); \
+        if (!adj(a,b)) return; \
+        if (!seen(a,b)) { mark(a,b); q.push({a,b,d}); } \
+    };
 /****************** Prime Generator **********************/ 
 const int N=1e7+10; int prime[20000010]; 
 bool isprime[N]; int nprime; 
@@ -140,7 +173,49 @@ and i<nprime;i++){cnt=0;while(n%prime[i]==0)
 {cnt++;n/=prime[i];}sum*=(cnt+1);}
 if(n>1)sum*=2;return sum;} 
 /****************** Prime Generator End **********************/ 
-
+#define BFS_LOOP while(!q.empty()){ \
+    auto cur = q.front(); q.pop(); \
+    int a=cur.a, b=cur.b, d=cur.d; \
+    if (a==ga && b==gb) { ans=d; break; } \
+    int r1=a/N, c1=a%N, r2=b/N, c2=b%N; \
+    if (r1==r2) { \
+        int r=r1, c=c1; \
+        if (c-1>=0 && freeCell(r,c-1)) \
+            push(q, id(r,c-1), id(r,c), d+1); \
+        if (c+2<N && freeCell(r,c+2)) \
+            push(q, id(r,c+1), id(r,c+2), d+1); \
+        if (r-1>=0 && freeCell(r-1,c) && freeCell(r-1,c+1)) \
+            push(q, id(r-1,c), id(r-1,c+1), d+1); \
+        if (r+1<M && freeCell(r+1,c) && freeCell(r+1,c+1)) \
+            push(q, id(r+1,c), id(r+1,c+1), d+1); \
+        if (r-1>=0 && freeCell(r-1,c) && freeCell(r-1,c+1)) { \
+            push(q, id(r-1,c),   id(r,  c),   d+1); \
+            push(q, id(r-1,c+1), id(r,  c+1), d+1); \
+        } \
+        if (r+1<M && freeCell(r+1,c) && freeCell(r+1,c+1)) { \
+            push(q, id(r,  c),   id(r+1,c),   d+1); \
+            push(q, id(r,  c+1), id(r+1,c+1), d+1); \
+        } \
+    } else if (c1==c2) { \
+        int r=r1, c=c1; \
+        if (r-1>=0 && freeCell(r-1,c)) \
+            push(q, id(r-1,c), id(r,  c), d+1); \
+        if (r+2<M && freeCell(r+2,c)) \
+            push(q, id(r+1,c), id(r+2,c), d+1); \
+        if (c-1>=0 && freeCell(r,c-1) && freeCell(r+1,c-1)) \
+            push(q, id(r,  c-1), id(r+1,c-1), d+1); \
+        if (c+1<N && freeCell(r,c+1) && freeCell(r+1,c+1)) \
+            push(q, id(r,  c+1), id(r+1,c+1), d+1); \
+        if (c-1>=0 && freeCell(r,c-1) && freeCell(r+1,c-1)) { \
+            push(q, id(r,  c-1), id(r,  c), d+1); \
+            push(q, id(r+1,c-1), id(r+1,c), d+1); \
+        } \
+        if (c+1<N && freeCell(r,c+1) && freeCell(r+1,c+1)) { \
+            push(q, id(r,  c),   id(r,  c+1), d+1); \
+            push(q, id(r+1,c),   id(r+1,c+1), d+1); \
+        } \
+    } \
+}
 /****************** Geometry *****************/ 
 template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
 {return abs(x1-x2)+abs(y1-y2);} 
@@ -173,10 +248,12 @@ template <typename T> inline T Cone (T radius,T base, T height)
 #define len(x) int((x).size())
 #define pb push_back
 #define rall(n) n.rbegin(),n.rend()
-
+#define qn queue<Node>
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
+struct Node {
+    int a, b, d;
+};
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
@@ -184,18 +261,16 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 
+int main() {
+    fastio;int M, N;if (!(cin >> M >> N)) return 0;
 
-void solve() {
+    INIT_PART
+    //conditions
+    qn q;push(q, sa, sb, 0);if (sa==ga && sb==gb) { cout << 0 << '\n'; return 0; } /*loop checkers*/int ans = -1;
 
-}
+    BFS_LOOP;
 
-int32_t main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-
-    int tc = 1;
-    cin >> tc;
-    for (int t = 1; t <= tc; t++) {
-        solve();
-    }
+    if (ans==-1) cout << "Impossible";
+    else cout << ans;
+    return 0;
 }

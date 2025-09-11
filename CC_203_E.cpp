@@ -52,7 +52,7 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
-
+const int LOG = 30;
 
 // ----------------------</BITWISE>-------------------------- 
 /* a=target variable, b=bit number to act upon 0-n */
@@ -116,7 +116,55 @@ void precompute_factorials() {
     }
 }
 // ----------------------</MATH>-------------------------- 
-
+#define movazed() { \
+    int N, K; \
+    cin >> N >> K; \
+    vector<unsigned int> A(N); \
+    for (int i = 0; i < N; ++i) cin >> A[i]; \
+    \
+    unsigned int total_xor = 0; \
+    for (auto x : A) total_xor ^= x; \
+    \
+    unsigned int basis[LOG] = {}; \
+    int par[LOG] = {}; \
+    int r = 0; \
+    bool odd_zero = false; \
+    \
+    for (int i = 0; i < N; ++i) { \
+        unsigned int v = A[i]; \
+        int p = 1; \
+        bool inserted = false; \
+        for (int b = LOG - 1; b >= 0; --b) { \
+            if (((v >> b) & 1u) == 0) continue; \
+            if (basis[b] == 0) { \
+                basis[b] = v; \
+                par[b] = p; \
+                ++r; \
+                inserted = true; \
+                break; \
+            } else { \
+                v ^= basis[b]; \
+                p ^= par[b]; \
+            } \
+        } \
+        if (!inserted) { \
+            if (p & 1) odd_zero = true; \
+        } \
+    } \
+    \
+    unsigned long long ans = 0; \
+    if (K == N) { \
+        ans = (total_xor == 0u) ? 1ull : 2ull; \
+    } else if (K & 1) { \
+        ans = 1ull << r; \
+    } else { \
+        int rb = r - (odd_zero ? 0 : 1); \
+        if (rb < 0) rb = 0; \
+        ans = 1ull << rb; \
+    } \
+    \
+    cout << ans << '\n'; \
+}
 /****************** Prime Generator **********************/ 
 const int N=1e7+10; int prime[20000010]; 
 bool isprime[N]; int nprime; 
@@ -184,11 +232,6 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 
-
-void solve() {
-
-}
-
 int32_t main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
@@ -196,6 +239,6 @@ int32_t main() {
     int tc = 1;
     cin >> tc;
     for (int t = 1; t <= tc; t++) {
-        solve();
+        movazed();
     }
 }
