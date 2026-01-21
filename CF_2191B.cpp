@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-
 using namespace std;
 /*
 +++++++++++++++************########%#***++====================+=-------------------------===========
@@ -95,7 +94,6 @@ template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr
 #define vll vector<ll>
 #define sza(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
-#define PRINT std::cout 
 #define PI 3.1415926535897932384626433832795l 
 const int MAX_N = 1e5 + 5;
 const ll MOD = 1e9 + 7;
@@ -107,7 +105,7 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define ii int
 #define vvi vector<vector<int>>
 #define vc vector<char>
-#define iin cin
+#define iin cin>>
 #define fls cout.flush();
 #define frnt front
 #define frs first
@@ -121,29 +119,26 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define po pop
 #define aut  auto
 #define pu push
-#define fm for
 #define input std::cin
 #define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
-#define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
+#define fl(i,a,b) for(ii i=a;i<b;i++)
+#define pri cout<<
 #define word char
 #define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
 #define vpii vector<pair<int, int>>
+#define ins insert
+#define usi unordered_set<int>
+#define mpll map<ll,ll>
+#define nuller if(!(cin>>n)) return;
+#define _br break
+#define ad add
+#define flp for
+
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
-
-ll power(ll x, ll y)
-{
-    ll u=1;
-    for(ll i=0;i<y;i++)
-        u*=x;
-    return u;
-}
 // ----------------------</BITWISE>-------------------------- 
 /* a=target variable, b=bit number to act upon 0-n */
 #define BIT_SET(a,b) ((a) |= (1ULL<<(b)))
@@ -257,27 +252,34 @@ template <typename T> inline T CylinderR(T radius, T height)
 template <typename T> inline T Cone (T radius,T base, T height)
 {return (1/3)*PI*radius*radius*height;} 
 /****************** Geometry end *****************/ 
-
+#define rss resize
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-#define vvi vector<vector<int>>
 #define line string
+#define des bool
+#define vit vector<it>
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
-
-
+#define stc struct
+#define yynn(ok) ((ok)?"YES\n":"NO\n")
 
 void sl(){
+    ii n; iin n;
+    vi a(n), ct(n+2,0);
+    fl(i,0,n){iin a[i]; (a[i]<=n)?ct[a[i]]++,0:0;}
     
+    des ok=1;
+    (ct[0]==0)?ok=0:
+    (ct[1]==0)?ok=(ct[0]==1?1:0):ok=1;
+    
+    pri yynn(ok);
 }
 
 int32_t main() {
     nfio
-    precompute_factorials(); 
-    ii tc; cin>>tc;
-    fm(;tc--;){
-        sl();
-    }
+    precompute_factorials();ii tc; iin tc;
+    for(ii _=0;_<tc;_++){sl();}
+    re 0;
 }

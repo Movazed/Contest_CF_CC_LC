@@ -124,13 +124,13 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define fm for
 #define input std::cin
 #define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
 #define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
+#define fr(i,a,b) for(ii i=(a);i<(b);++i)
 #define flx(i,a,b) for(int i=a;i<b;i++)
 #define word char
 #define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
 #define vpii vector<pair<int, int>>
+#define des bool
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
@@ -270,7 +270,21 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void sl(){
-    
+    ii n; iin>>n;vi a(n),b(n),c(n);fr(i,0,n) iin>>a[i];fr(i,0,n) iin>>b[i];fr(i,0,n) iin>>c[i];
+ll ab=0,bc=0;
+fr(s,0,n){
+        des kk=1;
+        fr(i,0,n)
+            if(a[i]>=b[(i+s)%n]){ kk=0; break; }
+        ab=ab + kk;
+    }
+
+    fr(s,0,n){
+        des kk=1;
+        fr(i,0,n)
+            if(b[i]>=c[(i+s)%n]){ kk=0; break; }
+        bc= bc + kk;
+    }pri<<(ll)n*ab*bc<<nl;
 }
 
 int32_t main() {

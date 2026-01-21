@@ -74,13 +74,16 @@ using namespace std;
 =======+##########*###*##%#########%%####%%%%%%%%%#################*######*********##%###%%####*==--
 ========###########*#*##*##%%%##*###%#%%%%%%%####%%####*##%######**#########****#**######%%######*=-
 */
+
 #pragma GCC optimize("Ofast,unroll-loops") 
+//#pragma GCC target("avx,avx2,avx512,fma") 
+
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
 void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifdef LOCAL
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)      
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 #else
 #define dbg(...)
 #endif
@@ -104,43 +107,16 @@ const ld EPS = 1e-9;
 const int MAX_FACT = 1e5 + 5;  // Maximum size for factorials
 int fact[MAX_FACT], ifact[MAX_FACT];
 #define qi queue<int>
-#define ii int
-#define vvi vector<vector<int>>
-#define vc vector<char>
-#define iin cin
-#define fls cout.flush();
-#define frnt front
-#define frs first
-#define scs second
-#define cst const
-#define wl while
-#define re return
-#define _exit(x) exit(x)
-#define len(x) int((x).size())
-#define pb push_back
-#define po pop
-#define aut  auto
-#define pu push
-#define fm for
-#define input std::cin
-#define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
-#define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
-#define word char
-#define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
-#define vpii vector<pair<int, int>>
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
 
-ll power(ll x, ll y)
+long long power(long long x,long long y)
 {
-    ll u=1;
-    for(ll i=0;i<y;i++)
+    long long u=1;
+    for(long long i=0;i<y;i++)
         u*=x;
     return u;
 }
@@ -195,7 +171,8 @@ int ncr(int n,int r,int c = MOD){
 
 
 void precompute_factorials() {
-    fact[0] = 1;for (int i = 1; i < MAX_FACT; i++) {
+    fact[0] = 1;
+    for (int i = 1; i < MAX_FACT; i++) {
         fact[i] = mul(fact[i - 1], i);
     }
     ifact[MAX_FACT - 1] = mod_inverse(fact[MAX_FACT - 1]);
@@ -257,7 +234,19 @@ template <typename T> inline T CylinderR(T radius, T height)
 template <typename T> inline T Cone (T radius,T base, T height)
 {return (1/3)*PI*radius*radius*height;} 
 /****************** Geometry end *****************/ 
+#define len(x) int((x).size())
+#define pb push_back
+#define re ll a,b; input >> a >> b; g[a].pb(b); g[b].pb(a];
+#define bu if(d[v]==-1){d[v]=d[u]+1;q.pu(v);}
+#define rd ll D; input >> D; line S; input >> S;
+#define fi a=1; fl(i,0,D) if(S[i]==t){a=i+1; break;}
 
+#define po pop
+#define pu push
+#define input std::cin
+#define rall(n) n.rbegin(),n.rend()
+#define fl(i, a, b) for(int i = a; i < b; i++)
+#define word char
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define vvi vector<vector<int>>
@@ -266,18 +255,75 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
-
-
-
-void sl(){
-    
-}
+const word c[3] = {'r', 'g', 'b'};
+#define frnt front
 
 int32_t main() {
-    nfio
-    precompute_factorials(); 
-    ii tc; cin>>tc;
-    fm(;tc--;){
-        sl();
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    line m; 
+    cin >> m;
+
+    ll tcs; 
+    cin >> tcs;
+
+    if(m == "first") {
+        fl(tc, 0, tcs) {
+            int n, e; 
+            input >> n >> e;
+            vvi g(n + 1);
+            fl(i, 0, e) {
+                ll a, b;input >> a >> b;
+                
+                    ios::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+                
+                
+                
+                g[a].pb(b);
+                g[b].pb(a);
+            }
+
+            vi d(n + 1, -1);
+            qi q;
+            d[1] = 0; 
+            q.pu(1);
+
+            for (; !q.empty(); ) {  
+                int u = q.frnt(); 
+                q.po();
+                for (auto v : g[u]) bu
+            }
+
+            line s(n, ' ');
+            fl(i, 1, n + 1) s[i - 1] = c[(d[i] % 3 + 3) % 3];
+            cout << s << "\n";
+        }
+    } else {
+        fl(tc, 0, tcs) {
+            ll Q; 
+            input >> Q;
+            fl(qi_idx, 0, Q) {
+                rd
+                bool p[3] = {0};
+                auto id = [&](word x){ return x == 'r' ? 0 : x == 'g' ? 1 : 2; };
+                for(word x : S) p[id(x)] = 1;
+
+                int cnt = p[0] + p[1] + p[2];
+                word t;
+                if(cnt == 1) {
+                    t = p[0] ? c[0] : p[1] ? c[1] : c[2];
+                } else {
+                    int m = -1;
+                    fl(i, 0, 3) if(!p[i]) m = i;
+                    t = c[(m + 2) % 3];
+                }
+
+                int a;
+                fi
+                cout << a << "\n";
+            }
+        }
     }
 }

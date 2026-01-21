@@ -1,40 +1,68 @@
 #include<bits/stdc++.h>
-
 using namespace std;
-
+// *#*##**#*++*#####***+**###*##*+++*+*#***+***####*****+*+*************+++++++++++==+=+++++++++=++++++
+// +++**#***+++*###***##*#%####***++++++++*+**##*##**#*++++******##**+*#+++++++++++++++++++++++++++++++
+// ##*******##**#####*##*#####*+****+*+++++=*******#+*+*=+++*#*#********+**++++++++++++++++++++++++++++
+// ###****###***####*#*****##*******##**+*+=***##**++*++=+**##*#**##****+++++++++++++++++++++++++++++++
+// #####****##*#%############*****+****#*++=**###*##+*++***##******#*+***++++++++++++++++++++++++++++++
+// %#*#*#####%%#%###*******###***********+==+*##*****=+==*+**++*++******+++++++++++++++++++++++++++++*=
+// %%##**#%%#%%%##%%###***####**+********+==*+****++++=-==+==++++++=++++++++++++++++++*++++++++++*++++=
+// %###**#%%%%%%###%#########***++**+**++=-++++**+++++=-+=+==+======+=+++++++++++++++++++++++**++***++=
+// ####**##%###%######*###*****++++++++++=-++==+++++++=-==+=====+++++++++++++++++*******+**+**+****+++=
+// ##*#**+*****###**##*+++*+++++++++=+++==-+==-========-====---======++++*******************+*****++++=
+// ##****++==++++++======--------=--------:------+-:---:------------==+***+***********#****#******++++=
+// +++=====++++===++=========+=======-+@@%***+*#%#------------------====+++++++*+##****#****+++++++=-=-
+// +++++====--=-----=------=------=-=*%@@@@@%%%##=-------------::----====----=-====--====-===========--
+// ---=---------::-:-:-----::---=+#%%%%@@@@@%%%%%##+--------------::-:------------=-===+=---========---
+// ==---===--------:-:--::::--=#%@@%%@@@@@@%%%%%%%##+----=----=--:-------------==-==+==+====---======--
+// =====-=-----------:--:-:--+%%%@@@@@@@@@%%%%%%%%%*+=-:::-::--:-::-::------=======-==================-
+// ===-=---=----=---==----==##%%%@%@@@@@@@@@@@%%%%#*+++=:--::--:-:::-----====-====-==---==============-
+// -========----==---=---+#%%%%%@@@@@@@@@@@@@@@@%#**+*##==========--------=====================+=====--
+// ============---==-=-=#%#%%%%%%@@@@@@@@@@@@@@%%+=+**+++++=======-=---==-==-=========================-
+// ========--==-----=-=#%%%%%%%%%%@@@@@@@@@@@@%%+===+++++*+=+===-::----==++========++++++==++=++===+=--
+// ==--==-=-----==----#%%%%%%%%%%%%%@@@@@@@@@%%%%*++====----:::::::::-:::::::::::-=====++=+=++++++++=-=
+// ----==--=------==-*%%%%%%%%%%%%%%%@%%@@@@%%@@%%+==-:::::-:::::::::-:::--::::::::-=-:::-=+++++++++=-=
+// ==---------==---=+%%%%%%%%%%%%%@@@@@%%@@@@%@%%%%#=-::::::::::-::::--::::::::--::::-=++++++==+++++=-=
+// -=-=------=-==--=+%%%%%%%%%%%%@@@@@@@@@@@@@@@@@@%%#=:::-:::::-::::::::::--::::-++**===+++++++++++=-=
+// -------=---====-=*%%%%%%%%@@@%%@@@@@%%%%%%%%%%%%%%%%*-::-:::::-:::::-:::::=++*#%%*+++++++++++++++=-=
+// -==--=---========+%%%%%%@%%%%%%@@@@@@@%%%%%%%%%%%%#%%%#*--:::::--::::-=++++*%%%+*++++++++++++++++=-=
+// =--=--===-====+==+%%%#****##*###%%%%@@@@@@@%%%%%%%%%%%%*::--:::::-++++++++++#%%#=+++++++*++++++++--=
+// =======++=======----===++++++***********+**********+===-:::::=*+*##++++++++++#%%*-+++*+++*++++++=--=
+// +++===++==-----=------=++++++++***+++**+++==+=---==-::::-+*+*##%#*++*++**++***%%#*=++++===---====--=
+// ***++=----=------=------=++++++++++++++++++++=--::::=+***%%%%%%%%######*====+++###+=++=::::-::::=-==
+// ++==+####**+=-----------=++++++++++**++++=====--=+**#%%*++++**##%%%%%%%%%%%%%%#####-::::=----==---==
+// ++=++++=++*#*####*+===----===+++++++++++++==++**#*%%%%**++*+*++*+*+****##%%%%%%%*=-::----:---:-:--==
+// =++=+++++++++===+*#####**+====++++++++=+++***#@@@%%%%#*****+*********++*****+++=====-------:--+*=-==
+// +++=+++==========*%%%%%%%%#%###*++=+**###%%%#@@@@%%%*+++*****************++=++=+====--=----=**%#=-==
+// =++=====+======--#%%%%%#****######**#%%%%%%#+*%@@@@%+==+###*****##*****+++++=++=====----=***++++====
+// -==========-=**%%%%%%#****#*#####%@%%%%##%%%*=##%%%%#*##**#####*###*++++++++=====-----+*+****+++====
+// =======-=+#%@@%#%%%%%##############%%##%@%%%%+=*##############*#*+++++++++=======--=**%%***#**++====
+// #+==+*%%%%%%%%########################%@@@%%##=+##%##%#######*++++++*++++========*++*%%%%+*****=====
+// *#####*+**#%%%%######################%#%%%%###*=*#%%%%%%##*++++++++++=========+****###%%%#==+++=====
+// **********####%%###################%%%%%#%#####+=#%%%##*++++++*++++========+*=*######+*%%#*===+=====
+// ***+*****####%%%%%#%%###################%#######=+%#**+++++*++++=========#*+**#*####*##%#***++*=====
 #pragma GCC optimize("Ofast,unroll-loops") 
-//#pragma GCC target("avx,avx2,avx512,fma") 
-
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
 void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifdef LOCAL
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)      
 #else
 #define dbg(...)
 #endif
-#define lli long long int
-#define ull unsigned long long
-#define vii vector<pair<int, int>>
-#define vll vector<long long>
+#define nl std::endl
 #define vi vector<int>
-#define vl vector<long>
+#define vc vector<char>
+#define vll vector<ll>
 #define ar array
-#define ull unsigned long long
-#define vii vector<pair<int, int>>
-#define vpll vector<pair<long long, long long>>
-#define vi vector<int>
-#define vl vector<long>
-#define ar array
-#define mp make_pair
 #define ll long long
 #define ld long double
+#define vpll vector<pair<ll, ll>>
+#define vll vector<ll>
 #define sza(x) ((int)x.size())
 #define all(a) (a).begin(), (a).end()
-#define PRINT std::cout
-#define INPUT std::cin
-#define nl endl
+#define PRINT std::cout 
 #define PI 3.1415926535897932384626433832795l 
 const int MAX_N = 1e5 + 5;
 const ll MOD = 1e9 + 7;
@@ -42,24 +70,26 @@ const ll INF = 1e9;
 const ld EPS = 1e-9;
 const int MAX_FACT = 1e5 + 5;  // Maximum size for factorials
 int fact[MAX_FACT], ifact[MAX_FACT];
-#define FOR(i, a, b) for(int i = a; i < b; i++)
-#define UPDATE_COUNT_DIV(factor_count) (count_div = (count_div * ((ll)(factor_count) + 1)) % MOD)
-#define COMPARE_FACTORS(p1, p2) (m_fact[p1].first == a_fact[p2].first)
-#define IF_LESS_THAN(p1, p2) (m_fact[p1].first < a_fact[p2].first)
-#define FORR(i, a, b) for(int i = a; i >= b; i--)
+#define qi queue<int>
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
-const int LOG = 30;
 
+ll power(ll x, ll y)
+{
+    long long u=1;
+    for(long long i=0;i<y;i++)
+        u*=x;
+    return u;
+}
 // ----------------------</BITWISE>-------------------------- 
 /* a=target variable, b=bit number to act upon 0-n */
 #define BIT_SET(a,b) ((a) |= (1ULL<<(b)))
 #define BIT_CLEAR(a,b) ((a) &= ~(1ULL<<(b)))
 #define BIT_FLIP(a,b) ((a) ^= (1ULL<<(b)))
-#define MAX 100005
+
 // '!!' to make sure this returns 0 or 1
 #define BIT_CHECK(a,b) (!!((a) & (1ULL<<(b))))
 
@@ -73,7 +103,6 @@ const int LOG = 30;
 // ----------------------<MATH>--------------------------- 
 
 template<typename T> T gcd(T a, T b){return(b?__gcd(a,b):a);} 
-
 template<typename T> T lcm(T a, T b){return(a*(b/gcd(a,b)));} 
 
 int add(int a, int b, int c = MOD){int res=a+b;
@@ -116,69 +145,7 @@ void precompute_factorials() {
     }
 }
 // ----------------------</MATH>-------------------------- 
-#define BITS 31
 
-#define POWER_OF_2(exp) ((exp) < 0 ? 0 : (1LL << (exp)))
-
-#define GET_BASIS_DIM(a, dim) { \
-    std::vector<long long> basis(BITS, 0); \
-    (dim) = 0; \
-    for (long long x : (a)) { \
-        for (int i = BITS - 1; i >= 0; --i) { \
-            if (!((x >> i) & 1)) continue; \
-            if (basis[i] == 0) { \
-                basis[i] = x; \
-                (dim)++; \
-                break; \
-            } \
-            x ^= basis[i]; \
-        } \
-    } \
-}
-
-#define tester { \
-    int n; \
-    long long k; \
-    std::cin >> n >> k; \
-    std::vector<long long> a(n); \
-    for (int i = 0; i < n; ++i) { \
-        std::cin >> a[i]; \
-    } \
-    \
-    if (k == n) { \
-        long long total_xor = 0; \
-        for (long long x : a) { \
-            total_xor ^= x; \
-        } \
-        if (total_xor == 0) { \
-            std::cout << 1 << std::endl; \
-        } else { \
-            std::cout << 2 << std::endl; \
-        } \
-        return; \
-    } \
-    \
-    int d; \
-    GET_BASIS_DIM(a, d); \
-    \
-    if (k % 2 != 0) { \
-        std::cout << POWER_OF_2(d) << std::endl; \
-    } else { \
-        std::vector<long long> a_prime(n); \
-        long long parity_bit = 1LL << 30; \
-        for (int i = 0; i < n; ++i) { \
-            a_prime[i] = a[i] | parity_bit; \
-        } \
-        int d_prime; \
-        GET_BASIS_DIM(a_prime, d_prime); \
-        \
-        if (d_prime > d) { \
-            std::cout << POWER_OF_2(d) << std::endl; \
-        } else { \
-            std::cout << POWER_OF_2(d - 1) << std::endl; \
-        } \
-    } \
-}
 /****************** Prime Generator **********************/ 
 const int N=1e7+10; int prime[20000010]; 
 bool isprime[N]; int nprime; 
@@ -213,7 +180,6 @@ template <typename T> inline T PointDistanceMinimum(T x1,T y1,T x2, T y2)
 T tmp4=min(tmp1, tmp2); return tmp3+tmp4; } 
 template <typename T> inline T PointDistance3D(T x1,T y1,T z1,T x2,T y2,T z2)
 {return sqrt(square(x2-x1)+square(y2-y1)+square(z2-z1));} 
- 
 template <typename T> inline T Cube(T a){return a*a*a;} 
 template <typename T> inline T RectengularPrism(T a,T b,T c)
 {return a*b*c;} 
@@ -234,23 +200,32 @@ template <typename T> inline T Cone (T radius,T base, T height)
 /****************** Geometry end *****************/ 
 #define len(x) int((x).size())
 #define pb push_back
+#define po pop
+#define pu push
+#define input std::cin
 #define rall(n) n.rbegin(),n.rend()
-
+#define fl(i, a, b) for(int i = a; i < b; i++)
+#define word char
+#define iin cin
+#define ii int
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
+#define vvi vector<vector<int>>
+#define line string
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
+#define frnt front
 
-
-void solve() tester
+void solve() {
+    line sr; iin >> sr; ii y = 0;
+    for(word xe: sr) y += (xe =='Y'?1:0);cout<<(y>1?"NO":"YES")<<nl;
+}
 
 int32_t main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0); cout.tie(0);
-
+ios_base::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+    precompute_factorials(); 
     int tc = 1;
     cin >> tc;
     for (int t = 1; t <= tc; t++) {

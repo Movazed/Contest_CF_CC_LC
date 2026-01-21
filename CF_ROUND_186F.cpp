@@ -124,26 +124,22 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define fm for
 #define input std::cin
 #define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
 #define pri cout
 #define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
+#define fl1(i,a,b) for(int i=a;i<=b;i++)
 #define word char
 #define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
 #define vpii vector<pair<int, int>>
+#define des bool
+#define nuller if(!(cin>>n)) return;
+#define pqvgll priority_queue<ll,vll,greater<ll>>
+#define usll unsigned long long
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
 
-ll power(ll x, ll y)
-{
-    ll u=1;
-    for(ll i=0;i<y;i++)
-        u*=x;
-    return u;
-}
 // ----------------------</BITWISE>-------------------------- 
 /* a=target variable, b=bit number to act upon 0-n */
 #define BIT_SET(a,b) ((a) |= (1ULL<<(b)))
@@ -166,16 +162,16 @@ template<typename T> T gcd(T a, T b){return(b?__gcd(a,b):a);}
 template<typename T> T lcm(T a, T b){return(a*(b/gcd(a,b)));} 
 
 int add(int a, int b, int c = MOD){int res=a+b;
-                         return(res>=c?res-c:res);} 
+               return(res>=c?res-c:res);} 
 int mod_neg(int a, int b, int c = MOD){int res;
-                         if(abs(a-b)<c)res=a-b;else res=(a-b)%c;
-                         return(res<0?res+c:res);} 
+                    if(abs(a-b)<c)res=a-b;else res=(a-b)%c;
+                 return(res<0?res+c:res);} 
 int mul(int a, int b, int c = MOD){ll res=(ll)a*b;
                          return(res>=c?res%c:res);} 
 int muln(int a, int b, int c = MOD){ll res=(ll)a*b;
                          return ((res%c)+c)%c;} 
 ll mulmod(ll a,ll b, ll m = MOD){ll q = (ll)(((ld)a*(ld)b)/(ld)m);
-                         ll r=a*b-q*m;if(r>m)r%=m;if(r<0)r+=m;return r;} 
+    ll r=a*b-q*m;if(r>m)r%=m;if(r<0)r+=m;return r;} 
 template<typename T>T expo(T e, T n){T x=1,p=e;while(n)
                          {if(n&1)x=x*p;p=p*p;n>>=1;}return x;} 
 template<typename T>T power(T e, T n, T m = MOD){T x=1,p=e;while(n)
@@ -194,15 +190,15 @@ int ncr(int n,int r,int c = MOD){
 }  
 
 
-void precompute_factorials() {
-    fact[0] = 1;for (int i = 1; i < MAX_FACT; i++) {
-        fact[i] = mul(fact[i - 1], i);
-    }
-    ifact[MAX_FACT - 1] = mod_inverse(fact[MAX_FACT - 1]);
-    for (int i = MAX_FACT - 2; i >= 0; i--) {
-        ifact[i] = mul(ifact[i + 1], i + 1);
-    }
-}
+// void precompute_factorials() {
+//     fact[0] = 1;for (int i = 1; i < MAX_FACT; i++) {
+//         fact[i] = mul(fact[i - 1], i);
+//     }
+//     ifact[MAX_FACT - 1] = mod_inverse(fact[MAX_FACT - 1]);
+//     for (int i = MAX_FACT - 2; i >= 0; i--) {
+//         ifact[i] = mul(ifact[i + 1], i + 1);
+//     }
+// }
 // ----------------------</MATH>-------------------------- 
 
 /****************** Prime Generator **********************/ 
@@ -266,18 +262,39 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
+cst ii md=998244353;
+ll f[1005],invf[1005],dp[1005][2],ndp[1005][2];
+ii cnt[62];
 
-
+ll pw(ll b,ll e){ll r=1;b%=md;while(e){if(e&1) r=r*b%md;b=b*b%md;e>>=1;}re r;}
+ll inv(ll x){re pw(x,md-2);}
+void pre(){
+    *f=1; fl(i,1004) *(f+i+1) = (*(f+i) * (i+1)) % md;*(invf+1004) = inv(*(f+1004));fm(ii i=1003;i>=0;i--) *(invf+i) = (*(invf+i+1)*(i+1)) % md;
+}
+ll nCr(ii n, ii r){re (r<0||r>n) ? 0 : (*(f+n) * *(invf+r) % md * *(invf+n-r) % md);}
 
 void sl(){
-    
-}
+    ii n,m; cin>>n>>m;
+    memset(cnt,0,sizeof(cnt));fl(i,n){ ii x; cin>>x; cnt[x]++;}ii tot=n;
+    fl(q,m){ii t; ll x; cin>>t>>x;t==1 ? (cnt[x]++, tot++) : (t==2 ? (cnt[x]--, tot--) : 0);
+    if(t==3){fl(s,tot+1) dp[s][0]=dp[s][1]=0;dp[0][1]=1;ii mx=0;
+    for(ii c=60;c>=0;c--){
+    ii cc=cnt[c],nmx=mx+cc;
+    fl(s,nmx+1) ndp[s][0]=ndp[s][1]=0;
+    fl(s,mx+1){if(!dp[s][0]&&!dp[s][1]) continue;ii g=c-s+1; des gf=false;gf = (g>=0 && ((x>>g)&1)) ? true : false;ll vg=dp[s][0],vt=dp[s][1];
+    if(cc==0){if(vg) ndp[s][0]=(ndp[s][0]+vg)%md;if(vt&&!gf) ndp[s][1]=(ndp[s][1]+vt)%md;
+    } else{fl(k,cc+1){ll w=nCr(cc,k); ii ns=s+k;if(vg) ndp[ns][0]=(ndp[ns][0]+vg*w%md)%md;
+    if(vt&&!gf){ii hi=c-s,lo=c-ns+1; des bg=false;
+    if(lo<0) bg=true; else{ ii ln=hi-lo+1; usll msk=(1ULL<<ln)-1; bg = (((x>>lo)&msk) != msk) ? true : bg;}
+    if(bg) ndp[ns][0]=(ndp[ns][0]+vt*w%md)%md;else ndp[ns][1]=(ndp[ns][1]+vt*w%md)%md;}
+    }}}mx=nmx; fl(s,mx+1) dp[s][0]=ndp[s][0],dp[s][1]=ndp[s][1];
+    }ll ans=0; fl(s,tot+1) ans=(ans+dp[s][0]+dp[s][1])%md; cout<<ans<<nl;
+}}}
 
 int32_t main() {
     nfio
-    precompute_factorials(); 
-    ii tc; cin>>tc;
-    fm(;tc--;){
-        sl();
-    }
+    pre();
+    sl();
+
+    return 0;
 }

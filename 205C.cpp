@@ -74,13 +74,16 @@ using namespace std;
 =======+##########*###*##%#########%%####%%%%%%%%%#################*######*********##%###%%####*==--
 ========###########*#*##*##%%%##*###%#%%%%%%%####%%####*##%######**#########****#**######%%######*=-
 */
+
 #pragma GCC optimize("Ofast,unroll-loops") 
+//#pragma GCC target("avx,avx2,avx512,fma") 
+
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
 void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifdef LOCAL
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)      
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 #else
 #define dbg(...)
 #endif
@@ -103,44 +106,17 @@ const ll INF = 1e9;
 const ld EPS = 1e-9;
 const int MAX_FACT = 1e5 + 5;  // Maximum size for factorials
 int fact[MAX_FACT], ifact[MAX_FACT];
-#define qi queue<int>
-#define ii int
-#define vvi vector<vector<int>>
-#define vc vector<char>
-#define iin cin
-#define fls cout.flush();
-#define frnt front
-#define frs first
-#define scs second
-#define cst const
-#define wl while
-#define re return
-#define _exit(x) exit(x)
-#define len(x) int((x).size())
-#define pb push_back
-#define po pop
-#define aut  auto
-#define pu push
-#define fm for
-#define input std::cin
-#define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
-#define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
-#define word char
-#define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
-#define vpii vector<pair<int, int>>
+
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
 
-ll power(ll x, ll y)
+long long power(long long x,long long y)
 {
-    ll u=1;
-    for(ll i=0;i<y;i++)
+    long long u=1;
+    for(long long i=0;i<y;i++)
         u*=x;
     return u;
 }
@@ -195,7 +171,8 @@ int ncr(int n,int r,int c = MOD){
 
 
 void precompute_factorials() {
-    fact[0] = 1;for (int i = 1; i < MAX_FACT; i++) {
+    fact[0] = 1;
+    for (int i = 1; i < MAX_FACT; i++) {
         fact[i] = mul(fact[i - 1], i);
     }
     ifact[MAX_FACT - 1] = mod_inverse(fact[MAX_FACT - 1]);
@@ -204,7 +181,100 @@ void precompute_factorials() {
     }
 }
 // ----------------------</MATH>-------------------------- 
-
+#define Movazed_zed() { \
+    int N; \
+    ll K; \
+    cin >> N >> K; \
+    vector<int> p(N + 1, 0), A(N + 1, 1); \
+    vector<vector<int>> ch(N + 1); \
+    for (int i = 2; i <= N; ++i) { \
+        cin >> p[i]; \
+        ch[p[i]].push_back(i); \
+    } \
+    for (int i = 2; i <= N; ++i) cin >> A[i]; \
+    vector<ll> x(N + 1); \
+    x[1] = K; \
+    for (int i = 2; i <= N; ++i) { \
+        ll xp = x[p[i]]; \
+        x[i] = xp - xp / (ll)A[i]; \
+    } \
+    const ll INF64 = (1LL << 62); \
+    vector<ll> minIn(N + 1, INF64), minOut(N + 1, INF64); \
+    for (int i = N; i >= 1; --i) { \
+        if (ch[i].empty()) minIn[i] = x[i]; \
+        else { \
+            ll m = INF64; \
+            for (int c : ch[i]) m = min(m, minIn[c]); \
+            minIn[i] = m; \
+        } \
+    } \
+    minOut[1] = INF64; \
+    vector<int> q; \
+    q.reserve(N); \
+    q.push_back(1); \
+    for (size_t qi = 0; qi < q.size(); ++qi) { \
+        int u = q[qi]; \
+        int m = (int)ch[u].size(); \
+        vector<ll> pre(m + 1, INF64), suf(m + 1, INF64); \
+        for (int i = 0; i < m; ++i) pre[i + 1] = min(pre[i], minIn[ch[u][i]]); \
+        for (int i = m - 1; i >= 0; --i) suf[i] = min(suf[i + 1], minIn[ch[u][i]]); \
+        for (int i = 0; i < m; ++i) { \
+            int v = ch[u][i]; \
+            ll excl = min(pre[i], suf[i + 1]); \
+            minOut[v] = min(minOut[u], excl); \
+            q.push_back(v); \
+        } \
+    } \
+    auto feasible = [&](ll X) -> bool { \
+        if (minIn[1] >= X) return true; \
+        vector<ll> need(N + 1, 0); \
+        ll CAP = K; \
+        for (int i = N; i >= 1; --i) { \
+            if (ch[i].empty()) need[i] = X; \
+            else { \
+                ll reqAll = 0; \
+                for (int c : ch[i]) { \
+                    ll y = need[c]; \
+                    ll req; \
+                    if (y == 0) req = 0; \
+                    else if (y > CAP) { reqAll = CAP + 1; break; } \
+                    else { \
+                        int a = A[c]; \
+                        if (a == 1) { reqAll = CAP + 1; break; } \
+                        ll q0 = (y + (a - 2)) / (a - 1); \
+                        ll x1 = y + q0 - 1; \
+                        if (x1 > CAP + 1) x1 = CAP + 1; \
+                        ll x2; \
+                        if (q0 > (CAP + 1) / (ll)a) x2 = CAP + 1; \
+                        else x2 = q0 * (ll)a; \
+                        req = min(x1, x2); \
+                        if (req > CAP) req = CAP + 1; \
+                    } \
+                    if (req > reqAll) reqAll = req; \
+                    if (reqAll > CAP) { break; } \
+                } \
+                need[i] = reqAll; \
+            } \
+        } \
+        for (int v = 2; v <= N; ++v) { \
+            if (minOut[v] >= X) { \
+                if (x[p[v]] >= need[v]) return true; \
+            } \
+        } \
+        return false; \
+    }; \
+    ll lo = 0, hi = K, ans = 0; \
+    while (lo <= hi) { \
+        ll mid = (lo + hi) >> 1; \
+        if (feasible(mid)) { \
+            ans = mid; \
+            lo = mid + 1; \
+        } else { \
+            hi = mid - 1; \
+        } \
+    } \
+    cout << ans << '\n'; \
+}
 /****************** Prime Generator **********************/ 
 const int N=1e7+10; int prime[20000010]; 
 bool isprime[N]; int nprime; 
@@ -257,27 +327,27 @@ template <typename T> inline T CylinderR(T radius, T height)
 template <typename T> inline T Cone (T radius,T base, T height)
 {return (1/3)*PI*radius*radius*height;} 
 /****************** Geometry end *****************/ 
+#define len(x) int((x).size())
+#define pb push_back
+#define INPUT std::cin
+#define rall(n) n.rbegin(),n.rend()
 
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-#define vvi vector<vector<int>>
-#define line string
+
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
 
-
-void sl(){
-    
-}
-
 int32_t main() {
-    nfio
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
     precompute_factorials(); 
-    ii tc; cin>>tc;
-    fm(;tc--;){
-        sl();
+    int tc = 1;
+    cin >> tc;
+    for (int t = 1; t <= tc; t++) {
+        Movazed_zed();
     }
 }

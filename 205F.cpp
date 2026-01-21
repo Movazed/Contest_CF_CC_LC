@@ -74,13 +74,16 @@ using namespace std;
 =======+##########*###*##%#########%%####%%%%%%%%%#################*######*********##%###%%####*==--
 ========###########*#*##*##%%%##*###%#%%%%%%%####%%####*##%######**#########****#**######%%######*=-
 */
+
 #pragma GCC optimize("Ofast,unroll-loops") 
+//#pragma GCC target("avx,avx2,avx512,fma") 
+
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
 void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifdef LOCAL
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)      
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 #else
 #define dbg(...)
 #endif
@@ -103,44 +106,17 @@ const ll INF = 1e9;
 const ld EPS = 1e-9;
 const int MAX_FACT = 1e5 + 5;  // Maximum size for factorials
 int fact[MAX_FACT], ifact[MAX_FACT];
-#define qi queue<int>
-#define ii int
-#define vvi vector<vector<int>>
-#define vc vector<char>
-#define iin cin
-#define fls cout.flush();
-#define frnt front
-#define frs first
-#define scs second
-#define cst const
-#define wl while
-#define re return
-#define _exit(x) exit(x)
-#define len(x) int((x).size())
-#define pb push_back
-#define po pop
-#define aut  auto
-#define pu push
-#define fm for
-#define input std::cin
-#define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
-#define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
-#define word char
-#define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
-#define vpii vector<pair<int, int>>
+
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
 
-ll power(ll x, ll y)
+long long power(long long x,long long y)
 {
-    ll u=1;
-    for(ll i=0;i<y;i++)
+    long long u=1;
+    for(long long i=0;i<y;i++)
         u*=x;
     return u;
 }
@@ -195,7 +171,8 @@ int ncr(int n,int r,int c = MOD){
 
 
 void precompute_factorials() {
-    fact[0] = 1;for (int i = 1; i < MAX_FACT; i++) {
+    fact[0] = 1;
+    for (int i = 1; i < MAX_FACT; i++) {
         fact[i] = mul(fact[i - 1], i);
     }
     ifact[MAX_FACT - 1] = mod_inverse(fact[MAX_FACT - 1]);
@@ -204,7 +181,16 @@ void precompute_factorials() {
     }
 }
 // ----------------------</MATH>-------------------------- 
-
+#define CHECK_CUTE() do {                        \
+    string input_string;                         \
+    cin >> input_string;                         \
+    bool is_first_and_last_same = (input_string[0] == input_string[2]); \
+    bool is_middle_w = (input_string[1] == 'w');\
+    if (is_first_and_last_same && is_middle_w)  \
+        cout << "Cute\n";                        \
+    else                                         \
+        cout << "No\n";                          \
+} while(0)
 /****************** Prime Generator **********************/ 
 const int N=1e7+10; int prime[20000010]; 
 bool isprime[N]; int nprime; 
@@ -228,7 +214,39 @@ and i<nprime;i++){cnt=0;while(n%prime[i]==0)
 {cnt++;n/=prime[i];}sum*=(cnt+1);}
 if(n>1)sum*=2;return sum;} 
 /****************** Prime Generator End **********************/ 
-
+#define SOLVE() { \
+    int n, k; \
+    cin >> n >> k; \
+    if (k == n) { \
+        cout << 0 << "\n"; \
+    } else { \
+        queue<pair<int,int>> q; \
+        vector<bool> visited(n + 2, false); \
+        q.push({k, 0}); \
+        visited[k] = true; \
+        while (!q.empty()) { \
+            auto [pos, dist] = q.front(); \
+            q.pop(); \
+            if (pos == n) { \
+                cout << dist << "\n"; \
+                break; \
+            } \
+            if (pos + 1 <= n && !visited[pos + 1]) { \
+                visited[pos + 1] = true; \
+                q.push({pos + 1, dist + 1}); \
+            } \
+            if (pos - 1 >= 1 && !visited[pos - 1]) { \
+                visited[pos - 1] = true; \
+                q.push({pos - 1, dist + 1}); \
+            } \
+            int mirror_pos = n + 1 - pos; \
+            if (mirror_pos >= 1 && mirror_pos <= n && !visited[mirror_pos]) { \
+                visited[mirror_pos] = true; \
+                q.push({mirror_pos, dist + 1}); \
+            } \
+        } \
+    } \
+}
 /****************** Geometry *****************/ 
 template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
 {return abs(x1-x2)+abs(y1-y2);} 
@@ -257,11 +275,14 @@ template <typename T> inline T CylinderR(T radius, T height)
 template <typename T> inline T Cone (T radius,T base, T height)
 {return (1/3)*PI*radius*radius*height;} 
 /****************** Geometry end *****************/ 
+#define len(x) int((x).size())
+#define pb push_back
+#define INPUT std::cin
+#define rall(n) n.rbegin(),n.rend()
 
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-#define vvi vector<vector<int>>
-#define line string
+
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
@@ -269,15 +290,14 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 
-void sl(){
-    
-}
 
 int32_t main() {
-    nfio
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
     precompute_factorials(); 
-    ii tc; cin>>tc;
-    fm(;tc--;){
-        sl();
+    int tc = 1;
+    cin >> tc;
+    for (int t = 1; t <= tc; t++) {
+        SOLVE();
     }
 }

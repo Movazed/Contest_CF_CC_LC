@@ -74,13 +74,16 @@ using namespace std;
 =======+##########*###*##%#########%%####%%%%%%%%%#################*######*********##%###%%####*==--
 ========###########*#*##*##%%%##*###%#%%%%%%%####%%####*##%######**#########****#**######%%######*=-
 */
+
 #pragma GCC optimize("Ofast,unroll-loops") 
+//#pragma GCC target("avx,avx2,avx512,fma") 
+
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
 void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
 #ifdef LOCAL
-#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)      
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 #else
 #define dbg(...)
 #endif
@@ -103,44 +106,17 @@ const ll INF = 1e9;
 const ld EPS = 1e-9;
 const int MAX_FACT = 1e5 + 5;  // Maximum size for factorials
 int fact[MAX_FACT], ifact[MAX_FACT];
-#define qi queue<int>
-#define ii int
-#define vvi vector<vector<int>>
-#define vc vector<char>
-#define iin cin
-#define fls cout.flush();
-#define frnt front
-#define frs first
-#define scs second
-#define cst const
-#define wl while
-#define re return
-#define _exit(x) exit(x)
-#define len(x) int((x).size())
-#define pb push_back
-#define po pop
-#define aut  auto
-#define pu push
-#define fm for
-#define input std::cin
-#define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
-#define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
-#define word char
-#define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
-#define vpii vector<pair<int, int>>
+
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
 #define SHUF(v) shuffle(all(v), RNG); 
 // Use mt19937_64 for 64 bit random numbers.
 
-ll power(ll x, ll y)
+long long power(long long x,long long y)
 {
-    ll u=1;
-    for(ll i=0;i<y;i++)
+    long long u=1;
+    for(long long i=0;i<y;i++)
         u*=x;
     return u;
 }
@@ -195,7 +171,8 @@ int ncr(int n,int r,int c = MOD){
 
 
 void precompute_factorials() {
-    fact[0] = 1;for (int i = 1; i < MAX_FACT; i++) {
+    fact[0] = 1;
+    for (int i = 1; i < MAX_FACT; i++) {
         fact[i] = mul(fact[i - 1], i);
     }
     ifact[MAX_FACT - 1] = mod_inverse(fact[MAX_FACT - 1]);
@@ -257,27 +234,77 @@ template <typename T> inline T CylinderR(T radius, T height)
 template <typename T> inline T Cone (T radius,T base, T height)
 {return (1/3)*PI*radius*radius*height;} 
 /****************** Geometry end *****************/ 
-
+#define len(x) int((x).size())
+#define pb push_back
+#define INPUT std::cin
+#define fl2(i, a, b) for (int i = (a); i < (b); i += 2)
+#define rall(n) n.rbegin(),n.rend()
+#define fl(i, a, b) for (int i = (a); i < (b); i++)
+#define nuller if (!(cin >> n)) return;
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-#define vvi vector<vector<int>>
-#define line string
+#define ins insert
+#define rss reserve
 // Helper Functions
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
+#define rie(vec) if ((vec).empty()) return {0};
+vi gss(const vi & bs){
+    rie(bs);
 
+    int s = bs[0];
 
+    vi nbs(bs.begin() + 1, bs.end());
+    vi sb = gss(nbs);
 
-void sl(){
-    
+    function<int(int)> adb = [&](int x){
+        return x + (1 << s);
+    };
+
+    vi lf;
+    for(auto x : sb) lf.pb(adb(x));
+
+    vi rgt = sb;
+
+    lf.ins(lf.end(), all(rgt));
+    return lf;
+}
+
+void solve() {
+    ll n;
+    cin >> n;
+
+    n == 0 ? void(cout << "\n") : void();
+    if(n == 0) return;
+
+    vi bs;
+    fl(i, 1, n) bs.pb(i);
+
+    vi lf = gss(bs);
+
+    for(auto &x : lf) x += 1; 
+
+    vi rgt;
+    rgt.rss(1 << (n - 1));
+
+    fl2(i, 0, (1 << n)) 
+        rgt.pb(i);
+
+    for(auto x : lf) cout << x << " ";
+    for(int i = 0; i < (int)rgt.size(); i++)
+        cout << rgt[i] << (i + 1 == (int)rgt.size() ? "" : " ");
+
+    cout << "\n";
 }
 
 int32_t main() {
-    nfio
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
     precompute_factorials(); 
-    ii tc; cin>>tc;
-    fm(;tc--;){
-        sl();
+    int tc = 1;
+    cin >> tc;
+    for (int t = 1; t <= tc; t++) {
+        solve();
     }
 }

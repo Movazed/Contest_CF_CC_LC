@@ -131,6 +131,7 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define word char
 #define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
 #define vpii vector<pair<int, int>>
+#define nuller     if(!(cin>>a>>b)) return;
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
@@ -270,7 +271,17 @@ ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); 
 
 
 void sl(){
-    
+    ll a,b; nuller ll o=0,e=0;ii h=0;
+fm(;;){
+    ll x=1LL<<h, no=o, ne=e;
+    (h&1)? ne+=x : no+=x;
+
+    if((no<=a && ne<=b) || (no<=b && ne<=a))
+        o=no, e=ne, ++h;
+    else
+        break;
+}
+    cout<<h<<nl;
 }
 
 int32_t main() {

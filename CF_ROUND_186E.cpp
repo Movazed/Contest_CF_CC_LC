@@ -124,13 +124,15 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define fm for
 #define input std::cin
 #define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
 #define pri cout
 #define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
+#define fl1(i,a,b) for(int i=a;i<=b;i++)
 #define word char
 #define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
 #define vpii vector<pair<int, int>>
+#define des bool
+#define nuller if(!(cin>>n)) return;
+#define pqvgll priority_queue<ll,vll,greater<ll>>
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
@@ -267,17 +269,28 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
-
+struct F{ii x; ll c;};
 
 void sl(){
-    
+    ii n,m; ll k; iin>>n>>m>>k;
+    vi bx(m); fl(i,m) iin>>bx[i];
+    vector<F> fr(n); ll tb=0;
+    fl(i,n){ ii xx; ll yy,zz; iin>>xx>>yy>>zz; ii ts = xx; fr[i]={ts,zz-yy}; tb=tb + yy; }
+    ll bd=k-tb;
+    sort(rall(bx));
+    sort(all(fr),[](F &a,F &b){re a.x>b.x;});
+    pqvgll pq; vll py;ii* bp=bx.data(); ii ab=0;
+    fm(auto &f:fr){while(bp < bx.data() + m && *bp >= f.x) ab++, bp++;pq.push(f.c);if((ii)pq.size()>ab) py.pb(pq.top()),pq.po();}
+    ll ans=pq.size(); sort(all(py));
+    fm(ll c:py) if(bd>=c) bd-=c,ans++; else break;
+    cout<<ans<<nl;
 }
 
 int32_t main() {
     nfio
-    precompute_factorials(); 
-    ii tc; cin>>tc;
+    ii tc; iin>>tc;
     fm(;tc--;){
         sl();
     }
+    return 0;
 }

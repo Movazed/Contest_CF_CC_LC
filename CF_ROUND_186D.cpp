@@ -124,13 +124,14 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define fm for
 #define input std::cin
 #define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
 #define pri cout
 #define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
+#define fl1(i,a,b) for(int i=a;i<=b;i++)
 #define word char
 #define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
 #define vpii vector<pair<int, int>>
+#define des bool
+#define nuller if(!(cin>>n)) return;
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
@@ -266,18 +267,30 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
+cst ii md = 998244353;
+ll f[60];
 
 
+void pre(){ f[0]=1; fl1(i,1,55) f[i]=f[i-1]*i%md; }
+
+ll pw(ll b,ll e){ ll r=1; b%=md; while(e){ r=e&1?r*b%md:r; b=b*b%md; e>>=1; } return r; }
+ll inv(ll n){ return pw(n,md-2); }
+ll np(ll n,ll r){ return (r<0||r>n)?0:f[n]*inv(f[n-r])%md; }
 
 void sl(){
-    
+    ii n; nuller
+    vll a(n+1); ll S=0; fl(i,n+1){ cin>>a[i]; S+=a[i]; }
+    ll q=S/n,r=S%n; ii cm=0;
+    fl1(i,1,n) { if(a[i]>q+1) { cout<<"0\n"; re; } cm += (a[i]==q+1); }
+    cout<<(cm>r?0:np(r,cm)*f[n-cm]%md)<<nl;
 }
 
 int32_t main() {
     nfio
-    precompute_factorials(); 
+     pre();
     ii tc; cin>>tc;
     fm(;tc--;){
         sl();
     }
+    return 0;
 }

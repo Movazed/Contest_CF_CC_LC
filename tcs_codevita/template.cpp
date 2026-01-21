@@ -109,28 +109,6 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define vc vector<char>
 #define iin cin
 #define fls cout.flush();
-#define frnt front
-#define frs first
-#define scs second
-#define cst const
-#define wl while
-#define re return
-#define _exit(x) exit(x)
-#define len(x) int((x).size())
-#define pb push_back
-#define po pop
-#define aut  auto
-#define pu push
-#define fm for
-#define input std::cin
-#define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
-#define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
-#define flx(i,a,b) for(int i=a;i<b;i++)
-#define word char
-#define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
-#define vpii vector<pair<int, int>>
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
@@ -257,7 +235,21 @@ template <typename T> inline T CylinderR(T radius, T height)
 template <typename T> inline T Cone (T radius,T base, T height)
 {return (1/3)*PI*radius*radius*height;} 
 /****************** Geometry end *****************/ 
-
+#define len(x) int((x).size())
+#define pb push_back
+#define po pop
+#define aut  auto
+#define pu push
+#define fm for
+#define input std::cin
+#define rall(n) n.rbegin(),n.rend()
+#define fl(i,n) for(int i=0;i<n;i++)
+#define pri cout
+#define fl(i,n) for(int i=0;i<n;i++)
+#define flx(i,a,b) for(int i=a;i<b;i++)
+#define word char
+#define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
+#define vpii vector<pair<int, int>>
 // Constants
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 #define vvi vector<vector<int>>
@@ -266,11 +258,17 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
-
+#define frnt front
+#define frs first
+#define scs second
+#define cst const
+#define wl while
+#define re return
+#define _exit(x) exit(x)
 
 
 void sl(){
-    
+
 }
 
 int32_t main() {

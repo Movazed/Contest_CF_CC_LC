@@ -124,13 +124,16 @@ int fact[MAX_FACT], ifact[MAX_FACT];
 #define fm for
 #define input std::cin
 #define rall(n) n.rbegin(),n.rend()
-#define fl(i,n) for(int i=0;i<n;i++)
+#define fr(i,a,b) for(int i=(a); i<(b); ++i)
 #define pri cout
-#define fl(i,n) for(int i=0;i<n;i++)
 #define flx(i,a,b) for(int i=a;i<b;i++)
 #define word char
 #define nfio ios_base ::sync_with_stdio(0);cin.tie(0); cout.tie(0);
 #define vpii vector<pair<int, int>>
+#define truth bool
+#define incr1 i+1
+#define incr2 i+2
+#define incr3 i+3
 // -------------------------<RNG>------------------------- 
 // RANDOM NUMBER GENERATOR
 mt19937 RNG(chrono::steady_clock::now().time_since_epoch().count());  
@@ -228,7 +231,7 @@ and i<nprime;i++){cnt=0;while(n%prime[i]==0)
 {cnt++;n/=prime[i];}sum*=(cnt+1);}
 if(n>1)sum*=2;return sum;} 
 /****************** Prime Generator End **********************/ 
-
+#define sbs substr
 /****************** Geometry *****************/ 
 template <typename T> inline T PointDistanceHorVer(T x1,T y1,T x2, T y2) 
 {return abs(x1-x2)+abs(y1-y2);} 
@@ -267,10 +270,25 @@ bool odd(ll num) { return ((num & 1) == 1); }
 bool even(ll num) { return ((num & 1) == 0); }
 ll getRandomNumber(ll l, ll r) { return uniform_int_distribution<ll>(l,r)(rng); }
 
+#define lp(i,a,b) for(int i=a;i<b;i++)
+#define mn(a,b) ((a)<(b)?(a):(b))
 
 
 void sl(){
-    
+        ii nn; line ss;
+        cin>>nn>>ss;
+
+        ii o1=0;
+        lp(i,0,nn-3)
+            o1 += (ss.sbs(i,4)=="2025");
+
+        ii o2=nn;
+        lp(i,0,nn-3){
+            ii cu = (ss[i]!='2')+(ss[i+1]!='0')+(ss[i+2]!='2')+(ss[i+3]!='6');
+            o2 = mn(o2,cu);
+        }
+
+        cout << mn(o1,o2) << '\n';
 }
 
 int32_t main() {
