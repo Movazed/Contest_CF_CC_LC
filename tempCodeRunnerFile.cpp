@@ -1,15 +1,23 @@
-void sl(){
-    ii n; iin n;
-    fl(i,n){
-        pri i;
-        pri action
-    }
-    pri nl;
-}
+void s() {
+    int n;
+    cin >> n;
 
-int32_t main() {
-    nfio
-    precompute_factorials();ii tc; iin tc;
-    for(ii _=0;_<tc;_++){sl();}
-    re 0;
+    vector<ll> a(n), b(n);
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    for (int i = 0; i < n; ++i) cin >> b[i];
+
+    sort(all(a), greater<ll>());
+
+    ll need = 0;
+    ll ans = 0;
+
+    for (int k = 1; k <= n; ++k) {
+        need += b[k - 1];
+        if (need > n) break;
+
+        ll x = a[need - 1];
+        ans = max(ans, x * k);
+    }
+
+    cout << ans << '\n';
 }
